@@ -1,0 +1,2799 @@
+FORMAT: 1A
+HOST: http://open-falcon.com/api/v1/
+
+# Open-Falcon API Documentation
+
+The Open-Falcon API is based on REST principles, all you need to use it is your Open-Falcon account. You must be authenticated and call HTTPs requests on the URLs listed below. 
+This documentation covers the core resources you can used to manipulate objects on Open-Falcon. Review the information basic instructions if you are new to APIs.
+
+>**Note:** We strongly discourage Open-Falcon customers from using the apiary Traffic Inspector. Any information you submit through Traffic Inspector is routed through a 3rd party, and is unsecured. If you choose to use Traffic Inspector against our recommendation, use your Open-Falcon TESTING credentials for API calls. _Never_ use your production credentials.
+
+# Getting Started with the Open-Falcon APIs
+
+Welcome to the Open-Falcon API reference! The Open-Falcon API is based on REST. This documentation lists and describes the individual resources you can used to manipulate objects on the Open-Falcon Platform. If you are new to APIs, review the info in this section.Often individual resources are used together in complex use cases. We describe many of these use cases on the Open-Falcon Developer Portal. Happy calling!!
+
+# Allowed HTTPs requests:
+
+- `POST` - Creates or updates a resource
+- `PUT` - Updates a resource
+- `GET` - Retrieves a resource or list of resources
+- `DELETE` - Delete a resource
+
+# Typical Server Responses
+
+- 200 `OK` - The request was successful (some API calls may return 201 instead).
+- 201 `Created` - The request was successful and a resource was created.
+- 204 `No Content` - The request was successful but there is no representation to return (that is, the response is empty).
+- 400 `Bad Request` - The request could not be understood or was missing required parameters.
+- 401 `Unauthorized` - Authentication failed or user does not have permissions for the requested operation.
+- 403 `Forbidden` - Access denied.
+- 404 `Not Found` - Resource was not found.
+- 405 `Method Not Allowed` - Requested method is not supported for the specified resource.
+- 429 `Too Many Requests` - Exceeded Open-Falcon API limits. Pause requests, wait one minute, and try again. 
+- 503 `Service Unavailable` - The service is temporary unavailable (e.g. scheduled Platform Maintenance). Try again later.
+
+# Use Cases
+## Create an Alearting Rule
+For an alearting rule, you should have 1) an Template for strategies, 2) an UserGroup for notification, and 3) and HostGroup to apply this rule.
+### Steps
+1. Create [HostGroup](#usecase-1-1), [UserGroup](#usecase-1-2), and [Template](#usecase-1-3)
+2. [Edit the strategy](#usecase-1-4).
+3. [Bind Template to UserGroup](#usecase-1-5).
+4. [Bind Template to HostGroup](#usecase-1-6).
+
+## Get Data for Your Customized Graph
+You could also use other chart library (e.g., jsflot, D3.js, highcharts) to draw your own graphs. 
+### Steps
+1. [Get the endpoint](#usecase-2-1).
+2. [Get the counter of endpoints step 2](#usecase-2-2).
+3. [Using the result of step 1 and 2 to get the graph history.](#usecase-2-3).
+
+# Feedback and Help
+If you have ideas about how we can improve this documentation (or want to tell us how great it is), contact us on [Github](https://github.com/xiaomi/open-falcon/issues). If you have questions about using these APIs, check out our [developer documentation](book.open-falcon.com), which contains articles describing complex use cases. (Some use cases are also listed briefly in this API reference under Use Cases).If you still have a question, fire a issue on [Github](https://github.com/xiaomi/open-falcon/issues).
+
+# API Design References
++ [API Blueprint Specification](https://github.com/apiaryio/api-blueprint/blob/master/API%20Blueprint%20Specification.md)
++ [API Blueprint Examples 1](https://raw.github.com/apiaryio/api-blueprint/master/examples/15.%20Advanced%20JSON%20Schema.md)
++ [GooData APIs](https://developer.gooddata.com/api#/introduction/getting-started-with-the-gooddata-apis/typical-server-responses)
++ [Best Practices for Designing a Pragmatic RESTful API](http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api)
+
+# API List
+
+```
+        Agent (Port 1988)
+            /ips
+            /page/cpu/usage
+            /page/df
+            /page/diskio
+            /page/memory
+            /page/system/loadavg
+            /page/system/uptime
+            /plugin/reset
+            /plugin/update
+            /plugins
+            /proc/cpu/mhz
+            /proc/cpu/num
+            /proc/cpu/usage
+            /proc/kernel/hostname
+            /proc/kernel/maxfiles
+            /proc/kernel/maxproc
+            /proc/kernel/version
+            /proc/memory
+            /proc/system/loadavg
+            /proc/system/uptime
+            /run
+            /system/date
+            /v1/push
+
+        Alarm (Port 9912)
+            /event/solve
+        
+        Dashboard (Port 8081)
+            /api/endpoints
+            /api/counters
+            /api/tmpgraph
+
+        Fe (Port 1234)
+            /about/:name:string
+            /auth/login
+            /auth/register
+            /me/team/c
+            /root
+            /sso/logout/:sig:string
+            /sso/sig
+            /sso/user/:sig:string
+            /team/all
+            /team/query
+            /team/users
+            /user/in
+            /user/qrcode/:id:int
+            /user/query
+
+        Graph (Port 6071)
+            /api/recv/
+            /count
+            /counter/all
+            /history/
+            /index/cache/
+            /index/update/
+            /index/updateAll
+            /index/updateAll/concurrent
+            /last/
+            /statistics/all
+            /v2/api/recv
+            /v2/history
+            /v2/index/cache
+            /v2/last
+        
+        Heartbeat Server (Port 6031)
+            /expressions cache.ExpressionCache.Get()
+            /plugins/ cache.GetPlugins()
+        
+        Judge (Port 6081)
+            /count
+            /expression/
+            /history/
+            /strategy/
+        
+        Links (Port 5090)
+            /store
+        
+        Portal (Port 5050)
+            /api/action/<action_id>
+            /api/metric/query
+            /api/pings
+            /api/template/<tpl_id>
+            /api/template/query
+            /api/uic/group
+            /api/version
+            /group/bind/template
+            /group/create
+            /group/delete/<group_id>
+            /group/rename
+            /group/templates/<grp_id>
+            /group/update/<group_id>
+            /host/<host_id>/groups
+            /host/<host_id>/templates
+            /host/add
+            /host/maintain
+            /host/remove
+            /host/reset
+            /host/unbind
+            /plugin/bind
+            /plugin/delete/<plugin_id>
+            /strategy/<sid>
+            /strategy/delete/<sid>
+            /strategy/update
+            /template/bind/node
+            /template/create
+
+        Query
+            /counter/all
+            /graph/history
+            /graph/info
+            /graph/last
+            /graph/last/raw
+            /graph/history/one (Not Found)
+            /graph/info/one (Not Found)
+        
+        Task (Port 8002)
+            /index/delete
+            /index/updateAll
+            /statistics/all
+        
+        Transfer
+            /filter/
+            /trace/
+```
+
+
+# Group Common Status
+## /health
+### Get Component Health [GET]
+
++ Supported Components:
+    - agent
+    - alarm
+    - fe
+    - graph
+    - hbs
+    - judge
+    - links (/api/health)
+    - portal (/api/health)
+    - query
+    - sender
+    - task
+    - transfer
+
++ Response 200 (text/plain)
+
+        ok
+
+## /version
+### Get Component Version [GET]
+
++ Supported Components:
+    - agent
+    - alarm
+    - fe
+    - graph
+    - hbs
+    - judge
+    - links (/api/version)
+    - portal (/api/version)
+    - query
+    - sender
+    - task
+    - transfer
+
++ Response 200 (text/plain)
+
+        5.1.1
+
+# Group Agent
+
+## IPs [/ips]
+
+### Get List of Trustable IPs [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": [
+                ""
+            ]
+        }
+
+## Page CPU Usage [/page/cpu/usage]
+
+### Get CPU Usage [GET]
+
+Format of returned data:
+```
+[
+    cpu.idle,
+    cpu.busy,
+    cpu.user,
+    cpu.nice,
+    cpu.system,
+    cpu.iowait,
+    cpu.irq,
+    cpu.softIrq,
+    cpu.steal,
+    cpu.guest
+]
+```
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": [
+                [
+                    "99.0%",
+                    "1.0%",
+                    "1.0%",
+                    "0.0%",
+                    "0.0%",
+                    "0.0%",
+                    "0.0%",
+                    "0.0%",
+                    "0.0%",
+                    "0.0%"
+                ]
+            ]
+        }
+
+## Page Df [/page/df]
+
+### Get Disk Space [GET]
+
+Get file system disk space usage.
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": [
+                [
+                    "/dev/disk/by-uuid/f7ae375a-83a2-4e42-84a0-706cb96b8376",
+                    "39.3G",
+                    "5.3G",
+                    "32.4G",
+                    "14.1%",
+                    "/config",
+                    "2.5M",
+                    "222.8K",
+                    "2.3M",
+                    "8.7%",
+                    "ext4"
+                ]
+            ]
+        }
+
+## Page Diskio [/page/diskio]
+
+### Get Disk IO Info [GET]
+
++ Response 200 (application/json)
+    
+        {
+            "msg": "success",
+            "data": [
+                [
+                    "sda",
+                    "0",
+                    "4",
+                    "0",
+                    "11",
+                    "0.00",
+                    "108.00",
+                    "19.64",
+                    "0.01",
+                    "0.73",
+                    "0.73",
+                    "0.80%"
+                ]
+            ]
+        }
+
+## Page Memory [/page/memory]
+
+### Get Memory Info [GET]
+
+Format of returned data (MB):
+```
+[
+    memory.total,
+    memory.used,
+    memory.free
+]
+```
+
++ Response 200 (application/json)
+ 
+        {
+            "msg": "success",
+            "data": [
+                2001,
+                1121,
+                880
+            ]
+        }
+
+## Page System Loadavg [/page/system/loadavg]
+
+### Get System Loadavg of 1, 5, and 15 min [GET]
+
++ Response 200 (application/json)
+  
+        {
+            "msg": "success",
+            "data": [
+                [
+                    0.03,
+                    3
+                ],
+                [
+                    0.03,
+                    3
+                ],
+                [
+                    0.05,
+                    5
+                ]
+            ]
+        }
+
+## Page System Uptime [/page/system/uptime]
+
+### Get System Uptime [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": "27 days 13 hours 45 minutes"
+        }
+
+## Plugin Reset [/plugin/reset]
+
+### Reset Plugin [GET]
+
+Must set `"plugin": {"enabled": true}` in cfg.json, otherwise return
+```
+w.Write([]byte("plugin not enabled"))
+return
+```
+
++ Response 200 (text/plain)
+
+        plugin not enabled
+
+## Plugin Update [/plugin/update]
+
+### Update Plugin [GET]
+
+Update plugin directory via `git pull` or `git clone`.
+Must set `"plugin": {"enabled": true}` in cfg.json, otherwise return
+```
+w.Write([]byte("plugin not enabled"))
+return
+```
+
++ Response 200 (text/plain)
+
+        plugin not enabled
+
+## Plugins [/plugins]
+
+### Get Plugins Info [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": {}
+        }
+
+## Proc CPU MHz [/proc/cpu/mhz]
+
+### Get CPU MHz [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": "2699.868"
+        }
+
+## Proc CPU Number [/proc/cpu/num]
+
+### Get CPU Number [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": 1
+        }
+
+## Proc CPU Usage [/proc/cpu/usage]
+
+### Get CPU Usage [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": {
+                "busy": 1.0204081632653015,
+                "guest": 0,
+                "idle": 98.9795918367347,
+                "iowait": 0,
+                "irq": 0,
+                "nice": 0,
+                "softirq": 0,
+                "steal": 0,
+                "system": 1.0204081632653061,
+                "user": 0
+            }
+        }
+
+## Proc Kernel Hostname [/proc/kernel/hostname]
+
+### Get Kernel Hostname [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": "agent1"
+        }
+
+## Proc Kernel Maxfiles [/proc/kernel/maxfiles]
+
+### Get Maximum Number of Open Files [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": 201591
+        }
+
+## Proc Kernel Maxproc [/proc/kernel/maxproc]
+
+### Get Maximum Number of Processes [GET]
+
+Get value of `cat /proc/sys/kernel/pid_max`.
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": 32768
+        }
+
+## Proc Kernel Version [/proc/kernel/version]
+
+### Get Kernel Version [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": "3.13.0-68-generic"
+        }
+
+## Proc Memory [/proc/memory]
+
+### Get Memory Info (Bytes) [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": {
+                "free": 891777024,
+                "total": 2099208192,
+                "used": 1207431168
+            }
+        }
+
+## Proc System Loadavg [/proc/system/loadavg]
+
+### Get System Loadavg of 1, 5, and 15 min [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": {
+                "Avg1min": 0,
+                "Avg5min": 0.02,
+                "Avg15min": 0.05
+            }
+        }
+
+## Proc System Uptime [/proc/system/uptime]
+
+### Get System Uptime [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": {
+                "days": 27,
+                "hours": 13,
+                "mins": 45
+            }
+        }
+
+## Run [/run]
+
+### Run a Command [POST]
+
+Run a command in request Body through `sh -c` if caller's IP is on trustable IP list.
+Must set `"http": {"backdoor": true}` in cfg.json, otherwise return
+```
+w.Write([]byte("/run disabled"))
+return
+```
+
++ Response 200 (text/plain)
+
+        run disabled
+
+## System Date [/system/date]
+
+### Get System Date [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": "2016-02-25 18:30:21"
+        }
+
+## V1 Push [/v1/push]
+
+### Push Metrics to Transfer [POST]
+
++ Request (application/json)
+
+        [
+            {
+                "metric": "cpu.user",
+                "endpoint": "host1",
+                "timestamp": 1456286040,
+                "step": 60,
+                "value": 0.29,
+                "counterType": "GAUGE",
+                "tags": "project=falcon,module=judge"
+            }
+        ]
+
++ Response 200 (text/plain)
+
+        success
+
+# Group Alarm
+## /config/reload
+### GET
+Only works if IP is "127.0.0.1", otherwise returns "no privilege".
+## /event/solve
+### POST
+Delete alarm event by given ID.
+## /health
+### GET
+Returned `ok` if the component works as usual.
++ Response 200 (application/json)
+    + Body    ok
+
+## /version
+### GET
+Get the version number of the component.
++ Response 200 (application/json)
+  
+        2.0.2
+
+## /workdir
+### GET
+Get the work directory of the component.
++ Response 200 (application/json)
+
+        /home/alarm
+
+# Group Dashboard
+
+## API Endpoints [/api/endpoints?q={endpoint}&tags={tag}&limit={limit}&_r={random}]
+
+<a name="usecase-2-1" />
+
++ Parameters
+    + endpoint: `host` (string) - Keyword to filter endpoint by name in the form of an string. Set it to % to get all endpoints.
+    + tag (string) - Keyword to filter endpoint by tags in the form of an string. It could be a null string.
+    + limit: `3` (number, optional) - Upper limit of count of returned endpoints.
+        + Default: `100`
+    + random: `0.591` (float) - A random float between 0 and 1.
+
+### View a List of Endpoints [GET]
+
+Example:
+/api/endpoints?q=h&tags&limit=3&_r=0.663
+
++ Response 200 (application/json)
+
+        {
+            "msg": "",
+            "data": [
+                "host1",
+                "host2",
+                "host3"
+            ],
+            "ok": true
+        }
+
+## API Counters [/api/counters]
+
+<a name="usecase-2-2" />
+
+### View a List of Counters [POST]
+
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[endpoints]=["host1"]&data[q]=cpu&data[limit]=30&data[_r]=0.739`. 
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Bendpoints%5D=%5B"host1"%5D&data%5Bq%5D=cpu&data%5Blimit%5D=30&data%5B_r%5D=0.739
+
++ Response 200 (application/json)
+
+        {
+            "msg": "",
+            "data": [
+                ["cpu.guest", "GAUGE", 60],
+                ["cpu.idle", "GAUGE", 60],
+                ["cpu.iowait", "GAUGE", 60],
+                ["cpu.nice", "GAUGE", 60],
+                ["cpu.steal", "GAUGE", 60],
+                ["cpu.user", "GAUGE", 60]
+            ],
+            "ok": true
+        }
+
+## API Tmpgraph [/api/tmpgraph]
+
+### Create a Tmpgraph [POST]
+
++ Request (application/json)
+
+        {
+            "endpoints": "host1",
+            "counters": "load.1min"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "ok": true,
+            "id": 216038
+        }
+
+## Chart [/chart]
+
+### Create a Tmpgraph by Given Endpoints and Counters [POST]
+
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in 
+`data[endpoints[]]=host1&data[counters[]]=cpu.idle&data[graph_type]=h`.
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Bendpoints%5B%5D%5D=host1&data%5Bcounters%5B%5D%5D=cpu.idle&data%5Bgraph_type%5D=h
+
++ Response 200 (application/json)
+
+        {
+            "params":{"graph_type": "h"},
+            "ok": true,
+            "id": 642
+        }
+
+## Chart A [/chart/a?id={id}&cf={cf}&start={start}&end={end}&sum={sum}]
+
++ Parameters
+    + id: `714628` (number) - ID of Tmpgraph.
+    + cf: `AVERAGE` (string) - 'AVERAGE', 'MAX', 'MIN', or 'LAST'.
+    + start (number, optional) - Timestamp value of start time.
+        + Default: ``
+    + end (number, optional) - Timestamp value of end time.
+        + Default: ``
+    + sum: `off` (string) - 'on' or 'off'.
+
+### Get Chart A Series Data [GET]
+
+Get series data of given tmpgraph ID in the format of chart A (combined-aspect).
+
++ Response 200 (application/json)
+
+        {
+            "units": "",
+            "series": [
+                {
+                    "counter": "",
+                    "endpoint": "",
+                    "data": [
+                        [1456450200000, 95.214106],
+                        [1456450260000, 97.243108],
+                        ...
+                    ],
+                    "name": "host1 cpu.idle",
+                    "cf": "AVERAGE"
+                }
+            ],
+            "title": ""
+        }
+
+## Chart Big [/chart/big]
+
+### Chart Big [GET]
+
+```
+return render_template("chart/big_ng.html", **locals())
+```
+
++ Response 200 (text/html)
+
+## Chart Embed [/chart/embed]
+
+### Chart Embed [GET]
+
+```
+return render_template("chart/embed.html", **locals())
+```
+
++ Response 200 (text/html)
+
+## Chart H [/chart/h?id={id}&cf={cf}&start={start}&end={end}&sum={sum}]
+
++ Parameters
+    + id: `714628` (number) - ID of Tmpgraph.
+    + cf: `AVERAGE` (string) - 'AVERAGE', 'MAX', 'MIN', or 'LAST'.
+    + start (number, optional) - Timestamp value of start time.
+        + Default: ``
+    + end (number, optional) - Timestamp value of end time.
+        + Default: ``
+    + sum: `off` (string) - 'on' or 'off'.
+
+### Get Chart H Series Data [GET]
+
+Get series data of given tmpgraph ID in the format of chart H (endpoint-aspect).
+
++ Response 200 (application/json)
+
+        {
+            "series": [
+                {
+                    "cf": "AVERAGE",
+                    "counter": "cpu.idle",
+                    "data": [
+                        [1456453020000, 95.261845],
+                        [1456453080000, 99.25],
+                        [1456453140000, 93.25],
+                        ...
+                    ],
+                    "endpoint": "host1",
+                    "name": "host1"
+                }
+            ],
+            "title": "cpu.idle",
+            "units": ""
+        }
+
+## Chart K [/chart/k?id={id}&cf={cf}&start={start}&end={end}&sum={sum}]
+
++ Parameters
+    + id: `714628` (number) - ID of Tmpgraph.
+    + cf: `AVERAGE` (string) - 'AVERAGE', 'MAX', 'MIN', or 'LAST'.
+    + start (number, optional) - Timestamp value of start time.
+        + Default: ``
+    + end (number, optional) - Timestamp value of end time.
+        + Default: ``
+    + sum: `off` (string) - 'on' or 'off'.
+
+### Get Chart K Series Data [GET]
+
+Get series data of given tmpgraph ID in the format of chart K (counter-aspect).
+
++ Response 200 (application/json)
+
+        {
+            "series": [
+                {
+                    "cf": "AVERAGE",
+                    "counter": "cpu.idle",
+                    "data": [
+                        [1456453620000, 93.483709],
+                        [1456453680000, 95.728643],
+                        [1456453740000, 89.473684],
+                        ...
+                    ],
+                    "endpoint": "host1",
+                    "name": "cpu.idle"
+                }
+            ],
+            "title": "host1",
+            "units": ""
+        }
+
+## Charts [/charts]
+
+### Charts [GET]
+
+Render a HTML page of multiple charts.
+```
+return render_template("chart/multi_ng.html", **locals())
+```
+
++ Response 200 (text/html)
+
+## /graph/<int:gid>/edit
+## /graph/<int:gid>/delete
+## /graph/multi_edit
+## /screen
+## /screen/<int:sid>
+## /screen/<int:sid>/clone
+## /screen/<int:sid>/delete
+## /screen/<int:sid>/edit
+## /screen/<int:sid>/graph
+## /screen/add
+## /screen/embed/<int:sid>
+
+
+# Group Fe
+
+## About [/about/{user_name}]
+
++ Parameters
+
+    + user_name: `root` (string) - Name of user.
+
+### About User [GET]
+
+Render HTML page of user info.
+```
+this.TplName = "user/about.html"
+```
+
++ Response 200 (text/html)
+
+## Auth Login [/auth/login]
+
+### Login through Login Page. [GET]
+
+Render login page if user hasn't been signed in.
+That is, value of "sig" cookie is empty or not valid.
+```
+this.renderLoginPage(appSig, callback)
+```
+
++ Response 200 (text/html)
+
+### Login through POST Form. [POST]
+
+Login user by the value of "name" and "password" in POST form.
+Set value of "sig" cookie if logged in successfully.
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[name]=root&data[password]=password`.
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Bname%5D=root&data%5Bpassword%5D=password
+
++ Response 200 (application/json)
+
+        {
+            "data": "",
+            "msg": ""
+        }
+
+## Auth Register [/auth/register]
+
+### Render Register Page. [GET]
+
+```
+this.TplName = "auth/register.html"
+```
+
++ Response 200 (text/html)
+
+### Register through POST Form. [POST]
+
+Register user by the value of "name" and "password" in POST form.
+Must set "canRegister": true in cfg.json, otherwise return
+```
+this.ServeErrJson("registration system is not open")
+```
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[name]=root&data[password]=password`.
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Bname%5D=root&data%5Bpassword%5D=password
+
++ Response 200 (application/json)
+
+        {
+            "msg": "registration system is not open"
+        }
+
+## Me Team C [/me/team/c]
+
+### Create an User Group. [POST]
+
+Create an user group by given name and user IDs.
+
+After "/me/team/c" API is called,
+one record is inserted into "uic.team" table:
+```
+mysql> select * from team where name="user_group_api";
++----+----------------+--------+---------+---------------------+
+| id | name           | resume | creator | created             |
++----+----------------+--------+---------+---------------------+
+| 16 | user_group_api | alias  |       2 | 2016-02-26 15:51:46 |
++----+----------------+--------+---------+---------------------+
+1 row in set (0.08 sec)
+```
+and three records are inserted into "uic.rel_team_user" table:
+```
+mysql> select * from rel_team_user where tid="16";
++----+-----+-----+
+| id | tid | uid |
++----+-----+-----+
+| 44 |  16 |   2 |
+| 45 |  16 |  32 |
+| 46 |  16 |  38 |
++----+-----+-----+
+3 rows in set (0.06 sec)
+```
+
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[name]=user_group_api&data[resume]=alias&data[users]=2,32,38`.
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Bname%5D=user_group_api&data%5Bresume%5D=alias&data%5Busers%5D=2,32,38
+
++ Response 200 (application/json)
+
+        {
+            "msg": ""
+        }
+
+## Root [/root?password={password}]
+
++ Parameters
+
+    + password (string) - Password for root.
+
+### Create Root [GET]
+
+Create initial root user.
+
++ Response 200 (text/plain)
+
+        success
+
+## SSO Logout [/sso/logout/{sig}]
+
++ Parameters
+
+    + sig (string) - Signature string of a session in "sig" cookie.
+
+### Logout [GET]
+
+Logout a session by value of "sig" cookie.
+    
++ Response 200 (application/json)
+
+        {
+            "msg": ""
+        }
+
+## SSO Sig [/sso/sig]
+
+### Get sig [GET]
+
+Generate an UUID for the value of "sig" cookie.
+
++ Response 200 (text/plain)
+
+        4b34ac9bd9db11e587bc0242ac110005
+
+## SSO User [/sso/user/{sig}]
+
++ Parameters
+
+    + sig (string) - Signature string of a session in "sig" cookie.
+
+### Get User Info [GET]
+
+Get user info by value of "sig" cookie.
+
++ Response 200 (application/json)
+
+        {
+            "user": {
+                "id": 1,
+                "name": "user",
+                "cnname": "",
+                "email": "",
+                "phone": "",
+                "im": "",
+                "qq": "",
+                "role": 2
+            }
+        }
+    
+## Team All [/team/all]
+
+### Show Full List of Teams [GET]
+
+Redirect to "/me/teams" which is an administration menu of user team if user is logged in.
+```
+this.Redirect("/me/teams", 301)
+```
+
++ Response 200 (text/html)
+
+## Team Query [/team/query?query={team_name}&limit={limit_num}]
+
++ Parameters
+
+    + team_name: `test` (string, optional) - Name of the query team. Get all teams in default.
+        + Default: `""`
+    + limit_num: `2` (number, optional) - Limit of the response team number.
+        + Default: `10`
+
+### Query Teams Info [GET]
+
+Filter teams by partially matching keyword.
+
++ Response 200 (application/json)
+
+        {
+            "msg": "",
+            "teams": [
+                {
+                  "id": 2,
+                  "name": "team_test",
+                  "resume": "",
+                  "creator": 1
+                },
+                {
+                  "id": 4,
+                  "name": "team_test2",
+                  "resume": "",
+                  "creator": 1
+                }
+            ]
+        }
+
+## Team Users [/team/users?name={team_name}]
+
++ Parameters
+
+    + team_name: `usergroup` (string) - Name of the team.
+
+### Query Team Members [GET]
+
+Get users of a team whose name matching {team_name}.
+
++ Response 200 (application/json)
+
+        {
+            "msg": "",
+            "users": [
+                {
+                  "id": 5,
+                  "name": "user1",
+                  "cnname": "",
+                  "email": "",
+                  "phone": "",
+                  "im": "",
+                  "qq": "",
+                  "role": 2
+                },
+                {
+                  "id": 8,
+                  "name": "user2",
+                  "cnname": "",
+                  "email": "",
+                  "phone": "",
+                  "im": "",
+                  "qq": "",
+                  "role": 2
+                }
+            ]
+        }
+
+## User in Team [/user/in?name={user_name}&teams={team_names}]
+
++ Parameters
+
+    + user_name: `user` (string) - Name of a user.
+    + team_names: `usergroup,usergroup2` (string) - Name of teams separated by comma.
+
+### Membership Checking [GET]
+
+Check if the user belongs to any one of given teams.
+`{True: 1, False: 0}`
+
++ Response 200 (text/plain)
+
+        1
+
+## User QR Code [/user/qrcode/{user_id}]
+
++ Parameters
+
+    + user_id: `17` (number) - ID of a user.
+
+### Get QR Code of an User [GET]
+
+Get PNG image of QR code by user ID.
+
++ Response 200 (image/png)
+
+## User Query [/user/query?query={user_name}&limit={limit_num}]
+
++ Parameters
+
+    + user_name: `user` (string, optional) - Name of an user. Get all users in default.
+        + Default: `""`
+    + limit_num: `3` (number, optional) - Limit of the response user number.
+        + Default: `10`
+
+### Filter Users by Keyword [GET]
+
+Get users whose names partially matching the keyword.
+
++ Response 200 (application/json)
+
+        {
+            "users": [
+                {
+                  "id": 8,
+                  "name": "user",
+                  "cnname": "",
+                  "email": "",
+                  "phone": "",
+                  "im": "",
+                  "qq": "",
+                  "role": 0
+                },
+                {
+                  "id": 17,
+                  "name": "user2",
+                  "cnname": "",
+                  "email": "",
+                  "phone": "",
+                  "im": "",
+                  "qq": "",
+                  "role": 0
+                },
+                {
+                  "id": 32,
+                  "name": "user3",
+                  "cnname": "",
+                  "email": "",
+                  "phone": "",
+                  "im": "",
+                  "qq": "",
+                  "role": 0
+                }
+            ]
+        }
+
+# Group Graph
+
+## API Recv [/api/recv/{endpoint}/{metric}/{ts}/{step}/{dstype}/{value}]
+
++ Parameters
+    + endpoint (string) - Name of an endpoint.
+    + metric (string) - Name of a metric.
+    + ts (number) - Timestamp.
+    + step (number) - must be greater than or equal to 30 seconds.
+    + dstype (string) - Data source type: GAUGE, COUNTER, or DERIVE.
+    + value (float) - Value of the metric.
+
+### Receive Data and Add a Graph Item [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": "ok"
+        }
+
+## Config [/config]
+
+### Get Content of Config [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": {
+                "pid": "",
+                "debug": false,
+                "http": {
+                    "enable": true,
+                    "listen": "0.0.0.0:6071"
+                },
+                "rpc": {
+                    "enable": true,
+                    "listen": "0.0.0.0:6070"
+                },
+                "rrd": {
+                    "storage": "/home/graph/data/6070"
+                },
+                "db": {
+                    "dsn": "user:password@tcp(250.251.252.253:3306)/graph?loc=Local&parseTime=true",
+                    "maxIdle": 4
+                }
+            }
+        }
+
+## Config Reload [/config/reload]
+
+### Reload Config [GET]
+
+Only works if IP is "127.0.0.1", otherwise returns "no privilege".
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": "no privilege"
+        }
+
+## Count of Graph [/count]
+
+### Get Count of Graph [GET]
+
+Get count of graph items whose timestamps are earlier than one hour ago.
+
++ Response 200 (text/plain)
+
+        330
+        339
+        347
+        ...
+
+## Counter All [/counter/all]
+
+### Get Full List of Graph Counters [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": [
+                {
+                    "Name": "GraphInfoCnt",
+                    "Cnt": 0,
+                    "Qps": 0,
+                    "Time": "2016-02-24 11:16:19",
+                    "Other": {}
+                },
+                {
+                    "Name": "GraphLastCnt",
+                    "Cnt": 18921,
+                    "Qps": 0,
+                    "Time": "2016-02-24 11:16:19",
+                    "Other": {}
+                },
+                {
+                    "Name": "GraphLastRawCnt",
+                    "Cnt": 0,
+                    "Qps": 0,
+                    "Time": "2016-02-24 11:16:19",
+                    "Other": {}
+                },
+                ...
+            ]
+        }
+
+## Graph Health [/health]
+
+### Get Graph Health [GET]
+
++ Response 200 (text/plain)
+
+        ok
+
+## Graph History [/history/{endpoint}/{counter}]
+
++ Parameters
+    + endpoint (string) - Name of an endpoint.
+    + counter (string) - Name of a counter.
+
+### Get Historical Data of a Counter [GET]
+
+Example:
+/history/host1/cpu.user
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": [
+                {
+                    "endpoint": "host1",
+                    "metric": "cpu.user",
+                    "tags": {},
+                    "value": 0.26525198938992045,
+                    "timestamp": 1456286160,
+                    "dstype": "GAUGE",
+                    "step": 60,
+                    "heartbeat": 120,
+                    "min": "U",
+                    "max": "U"
+                },
+                {
+                    "endpoint": "host1",
+                    "metric": "cpu.user",
+                    "tags": {},
+                    "value": 0,
+                    "timestamp": 1456286100,
+                    "dstype": "GAUGE",
+                    "step": 60,
+                    "heartbeat": 120,
+                    "min": "U",
+                    "max": "U"
+                },
+                {
+                    "endpoint": "host1",
+                    "metric": "cpu.user",
+                    "tags": {},
+                    "value": 0,
+                    "timestamp": 1456286040,
+                    "dstype": "GAUGE",
+                    "step": 60,
+                    "heartbeat": 120,
+                    "min": "U",
+                    "max": "U"
+                }
+            ]
+        }
+
+## Index Cache [/index/cache/{endpoint}/{metric}/{step}/{dstype}]
+
++ Parameters
+    + endpoint (string) - Name of an endpoint.
+    + metric (string) - Name of a metric.
+    + step (number) - must be greater than or equal to 30 seconds.
+    + dstype (string) - Data source type: GAUGE, COUNTER, or DERIVE.
+
+### Get the Content of an Indexed Cache [GET]
+
+Example:
+/index/cache/host1/cpu.user/60/GAUGE
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": {
+                "endpoint": "host1"
+                "tags": {},
+                "value": 0.8174386920980927,
+                "timestamp": 1456295220,
+                "dstype": "GAUGE",
+                "step": 60,
+                "heartbeat": 120,
+                "min": "U",
+                "max": "U"
+            }
+        }
+
+## Index Update [/index/update/{endpoint}/{metric}/{step}/{dstype}]
+
++ Parameters
+    + endpoint (string) - Name of an endpoint.
+    + metric (string) - Name of a metric.
+    + step (number) - must be greater than or equal to 30 seconds.
+    + dstype (string) - Data source type: GAUGE, COUNTER, or DERIVE.
+
+### Update an Indexed Cache [GET]
+
+Example:
+/index/update/host1/cpu.user/60/GAUGE
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": "ok"
+        }
+
+## Index UpdateAll [/index/updateAll]
+
+### Update All Indexed Caches [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": "ok"
+        }
+
+## Index UpdateAll Concurrent [/index/updateAll/concurrent]
+
+### Get Concurrence of Update All Indexed Caches [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": 1
+        }
+
+## Graph Last [/last/{endpoint}/{counter}]
+
++ Parameters
+    + endpoint (string) - Name of an endpoint.
+    + counter (string) - Name of a counter.
+
+### Get the Latest Historical Data of a Counter [GET]
+
+Example:
+/last/host1/cpu.user
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": [
+                {
+                    "endpoint": "host1",
+                    "metric": "cpu.user",
+                    "tags": {},
+                    "value": 0.26525198938992045,
+                    "timestamp": 1456286160,
+                    "dstype": "GAUGE",
+                    "step": 60,
+                    "heartbeat": 120,
+                    "min": "U",
+                    "max": "U"
+                }
+            ]
+        }
+
+## Statistics All [/statistics/all]
+
+### Get Full List of Graph Counters [GET]
+
+Same with "Counter All". This API will be discarded.
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": [
+                {
+                    "Name": "GraphInfoCnt",
+                    "Cnt": 0,
+                    "Qps": 0,
+                    "Time": "2016-02-24 11:16:19",
+                    "Other": {}
+                },
+                {
+                    "Name": "GraphLastCnt",
+                    "Cnt": 18921,
+                    "Qps": 0,
+                    "Time": "2016-02-24 11:16:19",
+                    "Other": {}
+                },
+                {
+                    "Name": "GraphLastRawCnt",
+                    "Cnt": 0,
+                    "Qps": 0,
+                    "Time": "2016-02-24 11:16:19",
+                    "Other": {}
+                },
+                ...
+            ]
+        }
+
+## V2 API Recv [/v2/api/recv]
+
+### Version 2 of Receiving Data and Adding a Graph Item [POST]
+
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in 
+`data[e]=host1&data[m]=cpu.user&data[v]=0.55555&data[ts]=1456286192&data[step]=60&data[type]=GAUGE`
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Be%5D=host1&data%5Bm%5D=cpu.user&data%5Bv%5D=0.55555&data%5Bts%5D=1456286192&data%5Bstep%5D=60&data%5Btype%5D=GAUGE
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": "ok"
+        }
+
+## V2 History [/v2/history]
+
+### Version 2 of History [POST]
+
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[e]=host1&data[m]=cpu.user`. 
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Be%5D=host1&data%5Bm%5D=cpu.user
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": [
+                {
+                    "endpoint": "host1",
+                    "metric": "cpu.user",
+                    "tags": {},
+                    "value": 0,
+                    "timestamp": 1456292700,
+                    "dstype": "GAUGE",
+                    "step": 60,
+                    "heartbeat": 120,
+                    "min": "U",
+                    "max": "U"
+                },
+                {
+                    "endpoint": "host1",
+                    "metric": "cpu.user",
+                    "tags": {},
+                    "value": 0,
+                    "timestamp": 1456292640,
+                    "dstype": "GAUGE",
+                    "step": 60,
+                    "heartbeat": 120,
+                    "min": "U",
+                    "max": "U"
+                },
+                {
+                    "endpoint": "host1",
+                    "metric": "cpu.user",
+                    "tags": {},
+                    "value": 0.26881720430107525,
+                    "timestamp": 1456292580,
+                    "dstype": "GAUGE",
+                    "step": 60,
+                    "heartbeat": 120,
+                    "min": "U",
+                    "max": "U"
+                }
+            ]
+        }
+
+## V2 Index Cache [/v2/index/cache]
+
+### Version 2 of Getting the Content of an Indexed Cache [POST]
+
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[e]=host1&data[m]=cpu.user&data[step]=60&data[type]=GAUGE`.
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Be%5D=host1&data%5Bm%5D=cpu.user&data%5Bstep%5D=60&data%5Btype%5D=GAUGE
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": {
+                "endpoint": "host1",
+                "metric": "cpu.user",
+                "tags": {},
+                "value": 0,
+                "timestamp": 1456297920,
+                "dstype": "GAUGE",
+                "step": 60,
+                "heartbeat": 120,
+                "min": "U",
+                "max": "U"
+            }
+        }
+
+## Graph Version [/version]
+
+### Get Graph Version [GET]
+
++ Response 200 (text/plain)
+
+        0.5.5
+
+## Graph Workdir [/workdir]
+
+### Get Working Directory [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": "/home/graph"
+        }
+
+# Group HBS
+## /config/reload
+### GET
+Only works if IP is "127.0.0.1", otherwise returns "no privilege".
+
+## /expressions
+### GET；POST
++ Response 200 (application/json)
+    + Body    
+        {
+            "msg": "success",
+            "data": null
+        }
+
+## /gdc/ping
+### GET
+Checks Platform availability.
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+
+
++ Response 204
+
++ Response 503
+
+    + Body 
+    
+            Scheduled maintenance in progress. Please try again later.  
+    
++ Response 503
+
+    + Headers
+    
+            Content-Type: application/json
+        
+    + Body 
+    
+            {"error":{
+                "message": "Internal server error. Please fill in bug report with request_id='{error-id}'"
+            }}
+
+## /health
+### GET
+Returned `ok` if the component works as usual.
+
+## /version
+### GET；POST
+Get the version number of the component.
++ Response 200 (text/plain)
+    + Body    
+        1.1.0
+
+## /workdir
+### GET；POST
+Get the work directory of the component.
++ Response 200 (application/json)
+    + Body    
+        {
+            "msg": "success",
+            "data": "/home/hbs"
+        }
+
+# Group Judge
+## /config/reload
+###GET；POST。
+Only works if IP is "127.0.0.1", otherwise returns "no privilege".
+
+## /count
+### GET；POST
++ Response 200 (text/plain)
+    + Body    
+        total: 179
+
+## /expression/
+### GET；POST
++ Response 200 (application/json)
+    + Body    
+        {
+            "msg": "success",
+            "data": null
+        }
+
+## /health
+### GET；POST
+Returned `ok` if the component works as usual.
++ Response 200 (text/plain)
+    + Body    
+        ok
+
+## /history/
+### GET；POST
++ Response 200 (text/plain)
+    + Body    
+        not found 
+
+## /strategy/
+### GET；POST
++ Response 200 (application/json)
+    + Body    
+        {
+            "msg": "success",
+            "data": null
+        }
+
+## /version
+### GET；POST
+Get the version number of the component.
++ Response 200 (text/plain)
+    + Body    
+        2.0.2
+
+## /workdir
+### GET；POST
+Get the work directory of the component.
++ Response 200 (application/json)
+    + Body    
+        {
+            "msg": "success",
+            "data": "/home/judge"
+        }
+
+
+# Group Links
+
+## /api/health
+### GET
+Returned `ok` if the component works as usual.
++ Response 200 (text/plain)
+
+        ok
+
+## /api/version
+### GET
+Get the version number of the component.
+
++ Response 200 (application/json)
+
+        0.0.0
+
+## Path [/{path}]
+
++ Parameters
+
+    + path: `q4gad3zl` (string)
+
+### Get Content of Alerting Message by Path [GET]
+
+```
+return render_template('index.html', **locals())
+```
+
++ Response 200 (text/html)
+
+## Store [/store]
+
+### Store the Content of Alerting Message [POST]
+
+Store the content of alerting message for senging SMS.
+Send content in plain text via POST.
+After "/store" API is called, "falcon_links.alert" table is inserted a new record:
+```
+mysql> select * from alert where path="q4gad3zl";
++----+----------+-------------+---------------------+
+| id | path     | content     | create_at           |
++----+----------+-------------+---------------------+
+| 12 | q4gad3zl | super alert | 2016-02-26 14:13:56 |
++----+----------+-------------+---------------------+
+1 row in set (0.01 sec)
+```
+
++ Request (text/plain)
+
+        super alert
+
++ Response 200 (text/html)
+
+        q4gad3zl
+
+# Group Portal
+
+## API Action [/api/action/{action_id}]
+
++ Parameters
+
+    + action_id: `5` (number) - Action ID.
+
+### Get Content of an Action [GET]
+
++ Response 200 (application/json)
+
+        {
+            "data": {
+                "after_callback_mail": 0,
+                "after_callback_sms": 0,
+                "before_callback_mail": 0,
+                "before_callback_sms": 0,
+                "callback": 0,
+                "id": 5,
+                "uic": "taipei",
+                "url": ""
+            },
+            "msg": ""
+        }
+
+## API Debug [/api/debug]
+
+### API Debug [GET]
+
+```
+return render_template('debug/index.html', config=config)
+```
+
++ Response 200 (text/html)
+
+## Portal Health [/api/health]
+
+### Get Portal Health [GET]
+
++ Response 200 (text/plain)
+
+        ok
+
+## Metric Query [/api/metric/query?query={query}&limit={limit}]
+
++ Parameters
+
+    + query: `cpu` (string) - Keyword for metric query.
+    + limit: `500` (number, optional) - Upper limit of count of query results.
+        + Default: `10`
+
+### Query Metrics by Keyword [GET]
+
++ Response 200 (application/json)
+
+        {
+            "data": [
+                {
+                    "name": "cpu.busy"
+                }, {
+                    "name": "cpu.cnt"
+                }, {
+                    "name": "cpu.guest"
+                }, {
+                    "name": "cpu.idle"
+                }, {
+                    "name": "cpu.iowait"
+                }, {
+                    "name": "cpu.irq"
+                }, {
+                    "name": "cpu.nice"
+                }, {
+                    "name": "cpu.softirq"
+                }, {
+                    "name": "cpu.steal"
+                }, {
+                    "name": "cpu.system"
+                }, {
+                    "name": "cpu"
+                }
+            ]
+        }
+
+## API Pings [/api/pings]
+
+### Get Full List of Host Names [GET]
+
++ Response 200 (application/json)
+
+        {
+            "hosts": [
+                "host1",
+                "host2",
+                "host3",
+                ...
+                "hostN",
+            ]
+        }
+
+## API Template [/api/template/{tpl_id}]
+
++ Parameters
+
+    + tpl_id: `2` (number) - Template ID.
+
+### Get Content of an Template [GET]
+
++ Response 200 (application/json)
+
+        {
+            "data": {
+                "action_id": 6,
+                "create_user": "user",
+                "id": 2,
+                "name": "traffic",
+                "parent_id": 0
+            },
+            "msg": ""
+        }
+
+## UIC Group [/api/uic/group?query={query}&limit={limit}]
+
++ Parameters
+
+    + query: `group` (string, optional) - Keyword for user group query. Default value is ''.
+    + limit: `500` (number, optional) - Upper limit of count of query results.
+        + Default: `10`
+
+### Get User Group Info [GET]
+
++ Response 200 (application/json)
+
+        {
+            "data": [
+                {
+                    "creator": 5,
+                    "id": 1,
+                    "name": "group1",
+                    "resume": ""
+                },
+                {
+                    "creator": 9,
+                    "id": 58,
+                    "name": "user-group",
+                    "resume": ""
+                }
+            ]
+        }
+
+## Portal Version [/api/version]
+
+### Get Portal Version [GET]
+
++ Response 200 (text/plain)
+
+        2.0.0
+
+## /expressions
+## /expression/add
+## /expression/delete/<expression_id>
+## /expression/pause
+## /expression/update
+## /expression/view/<eid>
+
+## Group Hosts [/group/{group_id}/hosts]
+
++ Parameters
+
+    + group_id: `3` (number) - Group ID.
+
+### Group Hosts [GET]
+
+```
+return render_template(
+    'host/index.html',
+    data={
+        'vs': vs,
+        'total': total,
+        'query': query,
+        'limit': limit,
+        'page': page,
+        'maintaining': maintaining,
+        'group': group,
+    },
+    config=config
+)
+```
+
++ Response 200 (text/html)
+
+## Group Hosts TXT [/group/{group_id}/hosts.txt]
+
++ Parameters
+
+    + group_id: `3` (number) - ID of the group to show all its hosts.
+
+### Get a Host of a Group [GET]
+
++ Response 200 (text/plain)
+
+        host1
+        host2
+        host3
+        
+## Group Plugins [/group/{group_id}/plugins]
+
++ Parameters
+
+    + group_id: `3` (number) - Group ID.
+
+### Group Hosts [GET]
+
+```
+return render_template('plugin/list.html', group=group, plugins=plugins, 
+                       uic_address=UIC_ADDRESS['external'], config=config)
+```
+
++ Response 200 (text/html)
+
+## Group Advanced [/group/advanced]
+
+### Group Advanced [GET]
+
+```
+return render_template('group/advanced.html', config=config)
+```
+
++ Response 200 (text/html)
+
+## Group Bind Template [/group/bind/template?grp_id={group_id}&tpl_id={template_id}]
+
++ Parameters
+
+    + group_id: `1` (number) - ID of the group to bind.
+    + template_id: `3` (number) - ID of the template to bind.
+    
+### Bind a Group to a Template [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": ""
+        }
+
+## Group Create [/group/create]
+
+<a name="usecase-1-1" />
+
+### Create a Group [POST]
+
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[grp_name]=linux_group`.
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Bgrp_name%5D=linux_group
+
++ Response 200 (application/json)
+
+        {
+            "msg": ""
+        }
+
+## Group Delete [/group/delete/{group_id}]
+
++ Parameters
+
+    + group_id: `1` (number) - ID of the group to delete.
+
+### Delete a Group [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": ""
+        }
+
+## Group Rename [/group/rename]
+
+### Rename a Group [POST]
+
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[old_str]=old_group_name&data[new_str]=new_group_name`.
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Bold_str%5D=old_group_name&data%5Bnew_str%5D=new_group_name
+
++ Response 200 (application/json)
+
+        {
+            "msg": ""
+        }
+
+## Group Templates [/group/templates/{group_id}]
+
++ Parameters
+
+    + group_id: `1` (number) - Group ID.
+
+### Render a HTML Page to Show Templates which Bind to the Group  [GET]
+
+```
+return render_template('group/templates.html', group=grp, ts=ts, 
+                        uic_address=UIC_ADDRESS['external'], config=config)
+```
+
++ Response 200 (text/html)
+
+## Group Update [/group/update/{group_id}]
+
++ Parameters
+
+    + group_id: `1` (number) - Group ID.
+
+### Update a Group [POST]
+
+Update the name of a group.
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[new_name]=new_group_name`.
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Bnew_name%5D=new_group_name
+
++ Response 200 (application/json)
+
+        {
+            "msg": ""
+        }
+
+## Host Groups [/host/{host_id}/groups]
+
++ Parameters
+
+    + host_id: `1` (number) - Host ID.
+
+### Host Groups [GET]
+
+```
+return render_template('host/groups.html', groups=groups, host=h, config=config)
+```
+
++ Response 200 (text/html)
+
+## Host Templates [/host/{host_id}/templates]
+
++ Parameters
+
+    + host_id: `1` (number) - Host ID.
+
+### Host Templates [GET]
+
+```
+return render_template('host/templates.html', config=config, **locals())
+```
+
++ Response 200 (text/html)
+
+## Host Add [/host/add]
+
+### Add a Host to a Group [POST]
+
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[group_id]=1&data[hosts]=host1`. 
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Bgroup_id%5D=1&data%5Bhosts%5D=host1
+
++ Response 201 (application/json)
+
+        {
+            "data": "<div class=\"alert alert-danger\" role=\"alert\">failure:<hr></div><div class=\"alert alert-success\" role=\"alert\">success:<hr>host1<br></div>",
+            "msg": ""
+        }
+
+## Host Maintain [/host/maintain]
+
+### Set maintain period of a Host [POST]
+
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[begin]=1456666666&data[end]=1456667777&data[host_ids]=1`. 
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Bbegin%5D=1456666666&data%5Bend%5D=1456667777&data%5Bhost_ids%5D=1
+
++ Response 200 (application/json)
+
+        {
+            "msg": ""
+        }
+
+## Host Remove [/host/remove]
+
+### Remove a Host from a Group [POST]
+
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[grp_id]=1&data[host_ids]=11`.
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Bgrp_id%5D=1&data%5Bhost_ids%5D=11
+
++ Response 200 (application/json)
+
+        {
+            "msg": ""
+        }
+
+## Host Reset [/host/reset]
+
+### Reset maintain period of a Host [POST]
+
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[host_ids]=11`.
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Bhost_ids%5D=11
+
++ Response 200 (application/json)
+
+        {
+            "msg": ""
+        }
+
+## Host Unbind [/host/unbind?group_id={group_id}&host_id={host_id}]
+
++ Parameters
+
+    + group_id: `1` (number) - ID of the group to unbind.
+    + host_id: `11` (number) - ID of the host to unbind.
+
+### Unbind a Host from a Group [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": ""
+        }
+
+## Strategy Update [/strategy/update]
+
+<a name="usecase-1-4" />
+
+### Update a Strategy [POST]
+
+Update a strategy and set alerting rule of a template.
+Strategies are contents of a template. Each template may have some strategies.
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in 
+`data[sid]=&data[metric]=cpu.idle&data[tags]=&data[max_step]=3&data[priority]=0&data[note]=&data[func]=all(#3)&data[op]=<=&data[right_value]=40&data[run_begin]=&data[run_end]=&data[tpl_id]=41`.
+After "/strategy/update" API is called, "falcon_portal.strategy" table is inserted a new record:
+```
+mysql> select * from strategy where tpl_id=41;
++----+----------+------+----------+----------+---------+----+-------------+------+-----------+---------+--------+
+| id | metric   | tags | max_step | priority | func    | op | right_value | note | run_begin | run_end | tpl_id |
++----+----------+------+----------+----------+---------+----+-------------+------+-----------+---------+--------+
+| 45 | cpu.idle |      |        3 |        0 | all(#3) | <= | 40          |      |           |         |     41 |
++----+----------+------+----------+----------+---------+----+-------------+------+-----------+---------+--------+
+1 row in set (0.07 sec)
+```
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Bsid%5D=&data%5Bmetric%5D=cpu.idle&data%5Btags%5D=&data%5Bmax_step%5D=3&data%5Bpriority%5D=0&data%5Bnote%5D=&data%5Bfunc%5D=all%28%233%29&data%5Bop%5D=%3C%3D&data%5Bright_value%5D=40&data%5Brun_begin%5D=&data%5Brun_end%5D=&data%5Btpl_id%5D=41
+
++ Response 200 (application/json)
+
+        {
+            "msg": ""
+        }
+
+## Template Action Update [/template/action/update/{tpl_id}]
+
+<a name="usecase-1-5" />
+
++ Parameters
+
+    + tpl_id: `41` (number) - Template ID.
+
+### Add an Action to Template [POST]
+
+Action binds user groups to a template. Each template has only one action. 
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in 
+`data[uic]=team_api&data[url]=&data[callback]=0&data[before_callback_sms]=0&data[before_callback_mail]=0&data[after_callback_sms]=0&data[after_callback_mail]=0`.
+After "/template/action/update/{tpl_id}" API is called, "falcon_portal.action" table is inserted a new record:
+```
+mysql> select * from action where uic="team_api";
++----+----------+-----+----------+---------------------+----------------------+--------------------+---------------------+
+| id | uic      | url | callback | before_callback_sms | before_callback_mail | after_callback_sms | after_callback_mail |
++----+----------+-----+----------+---------------------+----------------------+--------------------+---------------------+
+| 34 | team_api |     |        0 |                   0 |                    0 |                  0 |                   0 |
++----+----------+-----+----------+---------------------+----------------------+--------------------+---------------------+
+1 row in set (0.10 sec)
+```
+and "falcon_portal.tpl" table is updated by setting value of "action_id" field to 34:
+```
+mysql> select * from tpl where tpl_name="template_api";
++----+--------------+-----------+-----------+-------------+---------------------+
+| id | tpl_name     | parent_id | action_id | create_user | create_at           |
++----+--------------+-----------+-----------+-------------+---------------------+
+| 41 | template_api |         0 |        34 | root        | 2016-02-26 17:58:01 |
++----+--------------+-----------+-----------+-------------+---------------------+
+1 row in set (0.10 sec)
+```
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Buic%5D=team_api&data%5Burl%5D=&data%5Bcallback%5D=0&data%5Bbefore_callback_sms%5D=0&data%5Bbefore_callback_mail%5D=0&data%5Bafter_callback_sms%5D=0&data%5Bafter_callback_mail%5D=0
+
++ Response 200 (application/json)
+
+        {
+            "msg": ""
+        }
+
+## Template Bind Node [/template/bind/node]
+
+<a name="usecase-1-6" />
+
+### Bind a Template to a Hostgroup [POST]
+
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[node]=api_test_group&data[tpl_id]=41`.
+After "/template/bind/node" API is called, "falcon_portal.grp_tpl" table is inserted a new record:
+```
+mysql> select * from grp_tpl where tpl_id=41;
++--------+--------+-----------+
+| grp_id | tpl_id | bind_user |
++--------+--------+-----------+
+|     96 |     41 | root      |
++--------+--------+-----------+
+1 row in set (0.18 sec)
+```
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Bnode%5D=api_test_group&data%5Btpl_id%5D=41
+
++ Response 200 (application/json)
+
+        {
+            "msg": ""
+        }
+
+## Template Create [/template/create]
+
+<a name="usecase-1-3" />
+
+### Create a Template [POST]
+
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[name]=template_api`.
+After "/template/create" API is called, "falcon_portal.tpl" table is inserted a new record:
+```
+mysql> select * from tpl where tpl_name="template_api";
++----+--------------+-----------+-----------+-------------+---------------------+
+| id | tpl_name     | parent_id | action_id | create_user | create_at           |
++----+--------------+-----------+-----------+-------------+---------------------+
+| 41 | template_api |         0 |         0 | root        | 2016-02-26 17:58:01 |
++----+--------------+-----------+-----------+-------------+---------------------+
+1 row in set (0.20 sec)
+```
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Bname%5D=template_api
+
++ Response 200 (application/json)
+
+        {
+            "id": 41,
+            "msg": ""
+        }
+
+## Template Query [/template/query?query={query}&limit={limit}]
+
++ Parameters
+
+    + query: `test` (string, optional) - Keyword for template query. Default value is ''.
+    + limit: `500` (number, optional) - Upper limit of count of query results.
+        + Default: `10`
+
+### Get Template Info [GET]
+
++ Response 200 (application/json)
+
+        {
+            "data": [
+                {
+                    "action_id": 8,
+                    "create_user": "user",
+                    "id": 3,
+                    "name": "cputest",
+                    "parent_id": 0
+                },
+                {
+                    "action_id": 35,
+                    "create_user": "user2",
+                    "id": 27,
+                    "name": "test3",
+                    "parent_id": 0
+                }
+            ]
+        }
+
+# Group Query
+
+## /config
+## /counter/all
+
+## Graph History [/graph/history]
+
+<a name="usecase-2-3" />
+
+### Get Graph History [POST]
+
+Query historical data of multiple endpoint-counter sets.
+
++ Request (application/json)
+
+        {
+            "start": 1455782960,
+            "end": 1455783060,
+            "cf": "AVERAGE",
+            "endpoint_counters": [
+                {
+                    "endpoint": "host115",
+                    "counter": "load.1min"
+                },
+                {
+                    "endpoint": "host627",
+                    "counter": "cpu.idle"
+                }
+            ]
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "endpoint": "host115",
+                "counter": "load.1min",
+                "dstype": "GAUGE",
+                "step": 60,
+                "Values": [
+                    {
+                        "timestamp": 1455783000,
+                        "value": 2.12
+                    },
+                    {
+                        "timestamp": 1455783060,
+                        "value": 2.68
+                    }
+                ]
+            },
+            {
+                "endpoint": "host627",
+                "counter": "cpu.idle",
+                "dstype": "GAUGE",
+                "step": 60,
+                "Values": [
+                    {
+                        "timestamp": 1455783000,
+                        "value": 90.168776
+                    },
+                    {
+                        "timestamp": 1455783060,
+                        "value": 93.866328
+                    }
+                ]
+            }
+        ]
+
+## Graph Info [/graph/info]
+
+### Get Graph Info [POST]
+
+Query rrd filename and IP address of multiple endpoint-counter sets.
+
++ Request (application/json)
+
+        [
+            {
+                "endpoint": "host115",
+                "counter": "load.1min"
+            },
+            {
+                "endpoint": "host627",
+                "counter": "cpu.idle"
+            }
+        ]
+
++ Response 200 (application/json)
+
+        [
+            {
+                "endpoint": "host115",
+                "counter": "load.1min",
+                "consolFun": "GAUGE",
+                "step": 60,
+                "filename": "/home/graph/data/6070/75/75bbde_GAUGE_60.rrd",
+                "addr": "11.33.55.77:6070"
+            },
+            {
+                "endpoint": "host627",
+                "counter": "cpu.idle",
+                "consolFun": "GAUGE",
+                "step": 60,
+                "filename": "/home/graph/data/6070/e1/e18503_GAUGE_60.rrd",
+                "addr": "11.33.55.77:6070"
+            }
+        ]
+
+## Graph Last [/graph/last]
+
+### Get Graph Last [POST]
+
+Query lastest value of multiple endpoint-counter sets.
+
++ Request (application/json)
+
+        [
+            {
+                "endpoint": "host115",
+                "counter": "load.1min"
+            },
+            {
+                "endpoint": "host627",
+                "counter": "cpu.idle"
+            }
+        ]
+
++ Response 200 (application/json)
+
+        [
+            {
+                "endpoint": "host115",
+                "counter": "load.1min",
+                "value": {
+                    "timestamp": 1455787560,
+                    "value": 1.44
+                }
+            },
+            {
+                "endpoint": "host627",
+                "counter": "cpu.idle",
+                "value": {
+                    "timestamp": 1455787560,
+                    "value": 95.193929
+                }
+            }
+        ]
+
+## /graph/last/raw
+## /health
+## /proc/connpool
+## /statistics/all
+## /version
+## /workdir
+
+ 
+# Group Sender
+## /config/reload
+### GET；POST
+Only works if IP is "127.0.0.1", otherwise returns "no privilege".
+
+## /count
+### GET；POST
+Get the statistics of SMS, Mail, and QQ.
++ Response 200 (text/plain)
+    + Body    
+        sms:0, mail:0, qq:0
+## /health
+### GET；POST
+Returned `ok` if the component works as usual.
++ Response 200 (text/plain)
+    + Body    
+        ok
+## /version
+### GET；POST
+Get the version number of the component.
+
++ Response 200 (text/plain)
+    + Body    
+        0.0.1
+
+## /workdir
+### GET；POST
+Get the work directory of the component
++ Response 200 (application/json)
+    + Body    
+        {
+            "msg": "success",
+            "data": "/home/sender"
+        }
+
+# Group Task
+
+## Counter All [/counter/all]
+
+### Get Full List of Task Counters [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": [
+                {
+                    "Name": "IndexUpdateCnt",
+                    "Cnt": 17,
+                    "Qps": 0,
+                    "Time": "2016-02-24 17:19:03",
+                    "Other": {}
+                },
+                {
+                    "Name": "IndexUpdateErrorCnt",
+                    "Cnt": 0,
+                    "Qps": 0,
+                    "Time": "2016-02-24 17:19:03",
+                    "Other": {}
+                },
+                {
+                    "Name": "IndexDeleteCnt",
+                    "Cnt": 3,
+                    "Qps": 0,
+                    "Time": "2016-02-24 17:19:03",
+                    "Other": {
+                        "deleteCntEndpoint": 0,
+                        "deleteCntEndpointCounter": 0,
+                        "deleteCntTagEndpoint": 0
+                    }
+                },
+                {
+                    "Name": "CollectorCronCnt",
+                    "Cnt": 28868,
+                    "Qps": 0,
+                    "Time": "2016-02-24 17:19:03",
+                    "Other": {}
+                }
+            ]
+        }
+
+## Index Delete [/index/delete]
+
+### Delete Index Data [GET]
+
+Delete data of endpoints which had been created a week ago from "endpoint", "endpoint_counter", 
+and "tag_endpoint" tables.
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": "ok"
+        }
+
+## Index UpdateAll [/index/updateAll]
+
+### Update Indexes Of All Graphs [GET]
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": "ok"
+        }
+
+## Statistics All [/statistics/all]
+
+### Get Full List of Task Counters [GET]
+
+Same with "Counter All". This API will be discarded.
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": [
+                {
+                    "Name": "IndexUpdateCnt",
+                    "Cnt": 17,
+                    "Qps": 0,
+                    "Time": "2016-02-24 17:19:03",
+                    "Other": {}
+                },
+                {
+                    "Name": "IndexUpdateErrorCnt",
+                    "Cnt": 0,
+                    "Qps": 0,
+                    "Time": "2016-02-24 17:19:03",
+                    "Other": {}
+                },
+                {
+                    "Name": "IndexDeleteCnt",
+                    "Cnt": 3,
+                    "Qps": 0,
+                    "Time": "2016-02-24 17:19:03",
+                    "Other": {
+                        "deleteCntEndpoint": 0,
+                        "deleteCntEndpointCounter": 0,
+                        "deleteCntTagEndpoint": 0
+                    }
+                },
+                {
+                    "Name": "CollectorCronCnt",
+                    "Cnt": 28868,
+                    "Qps": 0,
+                    "Time": "2016-02-24 17:19:03",
+                    "Other": {}
+                }
+            ]
+        }
+
+# Group Transfer
+## /api/push
+### POST
+Push the counter to Transfer.
+
+```
+    Payload 
+    [
+        {
+            "endpoint": "bgp-bj-058-083-161-105",
+            "metric": "cpu.idle",
+            "value": 0.7857,
+            "step": 1,
+            "counterType": "COUNTER",
+            "tags": "tag",
+            "timestamp": 1452493440
+        }
+    ]
+```
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": {
+                "Message": "ok",
+                "Total": 1,
+                "Invalid": 0,
+                "Latency": 0
+            }
+        }
+
+## /config
+## /config/reload
+## /counter/all
+## /debug/connpool
+## /filter/
+## /health
+## /statistics/all
+## /trace/
+## /version
+## /workdir
