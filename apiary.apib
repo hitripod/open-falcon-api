@@ -92,6 +92,13 @@ If you have ideas about how we can improve this documentation (or want to tell u
             /api/endpoints
             /api/counters
             /api/tmpgraph
+            /screen
+            /screen/{sid}/clone
+            /screen/{sid}/delete
+            /screen/{sid}/edit
+            /screen/{sid}/graph
+            /screen/add
+            /screen/embed/{sid}
 
         Fe (Port 1234)
             /about/:name:string
@@ -882,14 +889,187 @@ return render_template("chart/multi_ng.html", **locals())
 ## /graph/<int:gid>/edit
 ## /graph/<int:gid>/delete
 ## /graph/multi_edit
-## /screen
-## /screen/<int:sid>
-## /screen/<int:sid>/clone
-## /screen/<int:sid>/delete
-## /screen/<int:sid>/edit
-## /screen/<int:sid>/graph
-## /screen/add
-## /screen/embed/<int:sid>
+
+## Screen [/screen]
+
+### Screen Index Page [GET]
+
+Render a HTML page of screen.
+```
+return render_template("screen/index.html", config=config, **locals())
+```
+
++ Response 200 (text/html)
+
+## Screen Sid [/screen/{sid}]
+
++ Parameters
+    + sid: `1011` (number) - ID of Screen.
+
+### Get a Screen [GET]
+
+```
+return render_template("screen/screen.html", config=config, **locals())
+```
+
++ Response 200 (text/html)
+
+## Screen Clone [/screen/{sid}/clone]
+
++ Parameters
+    + sid: `1011` (number) - ID of Screen.
+
+### Clone a Screen [POST]
+
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[screen_name]=screen_api_clone&data[with_graph]=true`.
+
+After "/screen/{sid}/clone" API is called, a record in "dashboard.dashboard_screen" table is inserted.
+```
+mysql> select * from dashboard_screen where id=1012;
++------+-----+------------------+---------------------+
+| id   | pid | name             | time                |
++------+-----+------------------+---------------------+
+| 1012 |   0 | screen_api_clone | 2016-02-29 23:02:07 |
++------+-----+------------------+---------------------+
+1 row in set (0.14 sec)
+```
+And a record in "dashboard.dashboard_graph" table is inserted.
+```
+mysql> select * from dashboard_graph where screen_id=1012;
++------+----------+-------+----------+-----------+----------+------------+--------+----------+-------------+
+| id   | title    | hosts | counters | screen_id | timespan | graph_type | method | position | falcon_tags |
++------+----------+-------+----------+-----------+----------+------------+--------+----------+-------------+
+| 4674 | cpu.idle | host1 | cpu.idle |      1012 |     3600 | h          | POST   |     4674 |             |
++------+----------+-------+----------+-----------+----------+------------+--------+----------+-------------+
+1 row in set (0.32 sec)
+```
+Return a HTML page showing the cloned screen.
+```
+return redirect("/screen/%s" %new_s.id)
+```
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Bscreen_name%5D=screen_api_clone&data%5Bwith_graph%5D=true
+
++ Response 200 (text/html)
+
+## Screen Delete [/screen/{sid}/delete]
+
++ Parameters
+    + sid: `1012` (number) - ID of Screen.
+
+### Delete a Screen [GET]
+
+After "/screen/{sid}/delete" API is called, a record in "dashboard.dashboard_screen" table is deleted.
+```
+mysql> select * from dashboard_screen where id=1012;
+Empty set (0.16 sec)
+```
+Return a HTML page showing the cloned screen.
+```
+return redirect("/screen")
+```
+
++ Response 200 (text/html)
+
+## Screen Edit [/screen/{sid}/edit]
+
++ Parameters
+    + sid: `1011` (number) - ID of Screen.
+
+### Rename a Screen [POST]
+
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[screen_name]=screen_api_new`.
+After "/screen/{sid}/edit" API is called, a record in "dashboard.dashboard_screen" table is updated.
+```
+mysql> select * from dashboard_screen where id=1011;
++------+-----+----------------+---------------------+
+| id   | pid | name           | time                |
++------+-----+----------------+---------------------+
+| 1011 |   0 | screen_api_new | 2016-02-29 22:06:25 |
++------+-----+----------------+---------------------+
+1 row in set (0.37 sec)
+```
+Return a HTML page showing the edited screen.
+```
+return redirect("/screen/%s" %screen.id)
+```
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Bscreen_name%5D=screen_api_new
+
++ Response 200 (text/html)
+
+## Screen Graph [/screen/{sid}/graph]
+
++ Parameters
+    + sid: `1011` (number) - ID of Screen.
+
+### Add a Graph to a Screen [POST]
+
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in
+`data[title]=cpu.idle&data[hosts]=host1&data[counters]=cpu.idle&data[timespan]=3600&data[graph_type]=h&data[method]=POST&data[position]=0`.
+After "/screen/{sid}/graph" API is called, a record in "dashboard.dashboard_screen" table is inserted.
+```
+mysql> select * from dashboard_graph where screen_id=1011;
++------+----------+-------+----------+-----------+----------+------------+--------+----------+-------------+
+| id   | title    | hosts | counters | screen_id | timespan | graph_type | method | position | falcon_tags |
++------+----------+-------+----------+-----------+----------+------------+--------+----------+-------------+
+| 4673 | cpu.idle | host1 | cpu.idle |      1011 |     3600 | h          | POST   |     4673 |             |
++------+----------+-------+----------+-----------+----------+------------+--------+----------+-------------+
+1 row in set (0.15 sec)
+```
+Return a HTML page showing the updated screen.
+```
+return redirect("/screen/%s" % sid)
+```
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Btitle%5D=cpu.idle&data%5Bhosts%5D=host1&data%5Bcounters%5D=cpu.idle&data%5Btimespan%5D=3600&data%5Bgraph_type%5D=h&data%5Bmethod%5D=POST&data%5Bposition%5D=0
+
++ Response 200 (text/html)
+
+## Screen Add [/screen/add]
+
+### Add a Screen [POST]
+
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[screen_name]=screen_api&data[pid]=0`.
+After "/screen/add" API is called, "dashboard.dashboard_screen" table is inserted a new record.
+```
+mysql> select * from dashboard_screen where name="screen_api";
++------+-----+------------+---------------------+
+| id   | pid | name       | time                |
++------+-----+------------+---------------------+
+| 1011 |   0 | screen_api | 2016-02-29 21:22:42 |
++------+-----+------------+---------------------+
+1 row in set (0.21 sec)
+```
+Return a HTML page showing the added screen.
+```
+return redirect("/screen/%s" % screen.id)
+```
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Bscreen_name%5D=screen_api&data%5Bpid%5D=0
+
++ Response 200 (text/html)
+
+## Screen Embed [/screen/embed/{sid}]
+
++ Parameters
+    + sid: `1011` (number) - ID of Screen.
+
+### Screen Embed [GET]
+
+```
+return redirect("/screen/%s" % screen.id)
+```
+
++ Response 200 (text/html)
 
 
 # Group Fe
