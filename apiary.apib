@@ -87,12 +87,23 @@ If you have ideas about how we can improve this documentation (or want to tell u
 
         Alarm (Port 9912)
             /event/solve
-        
+
         Dashboard (Port 8081)
-            /api/endpoints
+            /api/endpoints?q={endpoint}&tags={tag}&limit={limit}
             /api/counters
             /api/tmpgraph
+            /chart
+            /chart/a?id={id}&cf={cf}&start={start}&end={end}&sum={sum}
+            /chart/big
+            /chart/embed
+            /chart/h?id={id}&cf={cf}&start={start}&end={end}&sum={sum}
+            /chart/k?id={id}&cf={cf}&start={start}&end={end}&sum={sum}
+            /charts
+            /graph/<int:gid>/edit
+            /graph/<int:gid>/delete
+            /graph/multi_edit
             /screen
+            /screen/{sid}
             /screen/{sid}/clone
             /screen/{sid}/delete
             /screen/{sid}/edit
@@ -101,20 +112,33 @@ If you have ideas about how we can improve this documentation (or want to tell u
             /screen/embed/{sid}
 
         Fe (Port 1234)
-            /about/:name:string
+            /about/{user_name}
             /auth/login
             /auth/register
             /me/team/c
-            /root
-            /sso/logout/:sig:string
+            /root?password={password}
+            /sso/logout/{sig}
             /sso/sig
-            /sso/user/:sig:string
+            /sso/user/{sig}
             /team/all
-            /team/query
-            /team/users
-            /user/in
-            /user/qrcode/:id:int
-            /user/query
+            /team/query?query={team_name}&limit={limit_num}
+            /team/users?name={team_name}
+            /user/in?name={user_name}&teams={team_names}
+            /user/qrcode/{user_id}
+            /user/query?query={user_name}&limit={limit_num}
+            /api/v1/auth/register?name={name}&password={password}&repeat_password={repeat_password}&email={emil}
+            /api/v1/auth/login?name={name}&password={password}
+            /api/v1/auth/sessioncheck?cName={cName}&cSig={cSig}
+            /api/v1/auth/logout?cName={cName}&cSig={cSig}
+            /api/v1/auth/user?cName={cName}&cSig={cSig}
+            /api/v1/auth/user/update?cName={cName}&cSig={cSig}&email={email}&password={password}
+            /api/v1/dashboard/endpoints?cName={cName}&cSig={cSig}&queryStr={queryStr}
+            /api/v1/dashboard/endpointcounters?cName={cName}&cSig={cSig}&endpoints={endpoints}
+            /api/v1//hostgroup/query?cName={cName}&cSig={cSig}&queryStr={queryStr}
+            /api/v1//hostgroup/hosts?cName={cName}&cSig={cSig}&queryStr={queryStr}
+            /api/v1//hostgroup/hostgroupscounters?cName={cName}&cSig={cSig}&hostgroups={hostgroups}
+            /api/v1/portal/events/get?cName={cName}&cSig={cSig}&startTime={startTime}&endTime={endTime}&priority={priority}&status={status}
+            /api/v1/portal/events/close?cName={cName}&cSig={cSig}&id={id}
 
         Graph (Port 6071)
             /api/recv/
@@ -131,7 +155,9 @@ If you have ideas about how we can improve this documentation (or want to tell u
             /v2/history
             /v2/index/cache
             /v2/last
-        
+            /version
+            /workdir
+
         Heartbeat Server (Port 6031)
             /expressions cache.ExpressionCache.Get()
             /plugins/ cache.GetPlugins()
@@ -141,38 +167,47 @@ If you have ideas about how we can improve this documentation (or want to tell u
             /expression/
             /history/
             /strategy/
-        
+
         Links (Port 5090)
+            /{path}
             /store
-        
+
         Portal (Port 5050)
-            /api/action/<action_id>
-            /api/metric/query
+            /api/action/{action_id}
+            /api/debug
+            /api/metric/query?query={query}&limit={limit}
             /api/pings
-            /api/template/<tpl_id>
-            /api/template/query
-            /api/uic/group
+            /api/template/{tpl_id}
+            /api/uic/group?query={query}&limit={limit}
             /api/version
-            /group/bind/template
+            /expressions
+            /expression/add
+            /expression/delete/<expression_id>
+            /expression/pause
+            /expression/update
+            /expression/view/<eid>
+            /group/{group_id}/hosts
+            /group/{group_id}/hosts.txt
+            /group/{group_id}/plugins
+            /group/advanced
+            /group/bind/template?grp_id={group_id}&tpl_id={template_id}
             /group/create
-            /group/delete/<group_id>
+            /group/delete/{group_id}
             /group/rename
-            /group/templates/<grp_id>
-            /group/update/<group_id>
-            /host/<host_id>/groups
-            /host/<host_id>/templates
+            /group/templates/{group_id}
+            /group/update/{group_id}
+            /host/{host_id}/groups
+            /host/{host_id}/templates
             /host/add
             /host/maintain
             /host/remove
             /host/reset
-            /host/unbind
-            /plugin/bind
-            /plugin/delete/<plugin_id>
-            /strategy/<sid>
-            /strategy/delete/<sid>
+            /host/unbind?group_id={group_id}&host_id={host_id}
             /strategy/update
+            /template/action/update/{tpl_id}
             /template/bind/node
             /template/create
+            /template/query?query={query}&limit={limit}
 
         Query
             /counter/all
@@ -182,12 +217,13 @@ If you have ideas about how we can improve this documentation (or want to tell u
             /graph/last/raw
             /graph/history/one (Not Found)
             /graph/info/one (Not Found)
-        
+
         Task (Port 8002)
+            /counter/all
             /index/delete
             /index/updateAll
             /statistics/all
-        
+
         Transfer
             /filter/
             /trace/
@@ -656,21 +692,21 @@ Get the work directory of the component.
 
 # Group Dashboard
 
-## API Endpoints [/api/endpoints?q={endpoint}&tags={tag}&limit={limit}&_r={random}]
+## API Endpoints [/api/endpoints?q={endpoint}&tags={tag}&limit={limit}]
 
 <a name="usecase-2-1" />
 
 + Parameters
+
     + endpoint: `host` (string) - Keyword to filter endpoint by name in the form of an string. Set it to % to get all endpoints.
     + tag (string) - Keyword to filter endpoint by tags in the form of an string. It could be a null string.
     + limit: `3` (number, optional) - Upper limit of count of returned endpoints.
         + Default: `100`
-    + random: `0.591` (float) - A random float between 0 and 1.
 
 ### View a List of Endpoints [GET]
 
 Example:
-/api/endpoints?q=h&tags&limit=3&_r=0.663
+/api/endpoints?q=h&tags&limit=3
 
 + Response 200 (application/json)
 
@@ -690,11 +726,11 @@ Example:
 
 ### View a List of Counters [POST]
 
-Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[endpoints]=["host1"]&data[q]=cpu&data[limit]=30&data[_r]=0.739`. 
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[endpoints]=["host1"]&data[q]=cpu&data[limit]=30`. 
 
 + Request (application/x-www-form-urlencoded)
 
-        data%5Bendpoints%5D=%5B"host1"%5D&data%5Bq%5D=cpu&data%5Blimit%5D=30&data%5B_r%5D=0.739
+        data%5Bendpoints%5D=%5B"host1"%5D&data%5Bq%5D=cpu&data%5Blimit%5D=30
 
 + Response 200 (application/json)
 
@@ -751,6 +787,7 @@ Do not forget to escape `[` with `%5B` and `]` with `%5D` in
 ## Chart A [/chart/a?id={id}&cf={cf}&start={start}&end={end}&sum={sum}]
 
 + Parameters
+
     + id: `714628` (number) - ID of Tmpgraph.
     + cf: `AVERAGE` (string) - 'AVERAGE', 'MAX', 'MIN', or 'LAST'.
     + start (number, optional) - Timestamp value of start time.
@@ -806,6 +843,7 @@ return render_template("chart/embed.html", **locals())
 ## Chart H [/chart/h?id={id}&cf={cf}&start={start}&end={end}&sum={sum}]
 
 + Parameters
+
     + id: `714628` (number) - ID of Tmpgraph.
     + cf: `AVERAGE` (string) - 'AVERAGE', 'MAX', 'MIN', or 'LAST'.
     + start (number, optional) - Timestamp value of start time.
@@ -842,6 +880,7 @@ Get series data of given tmpgraph ID in the format of chart H (endpoint-aspect).
 ## Chart K [/chart/k?id={id}&cf={cf}&start={start}&end={end}&sum={sum}]
 
 + Parameters
+
     + id: `714628` (number) - ID of Tmpgraph.
     + cf: `AVERAGE` (string) - 'AVERAGE', 'MAX', 'MIN', or 'LAST'.
     + start (number, optional) - Timestamp value of start time.
@@ -877,7 +916,7 @@ Get series data of given tmpgraph ID in the format of chart K (counter-aspect).
 
 ## Charts [/charts]
 
-### Charts [GET]
+### Get Charts [GET]
 
 Render a HTML page of multiple charts.
 ```
@@ -885,7 +924,7 @@ return render_template("chart/multi_ng.html", **locals())
 ```
 
 + Response 200 (text/html)
-
+ 
 ## /graph/<int:gid>/edit
 ## /graph/<int:gid>/delete
 ## /graph/multi_edit
@@ -904,6 +943,7 @@ return render_template("screen/index.html", config=config, **locals())
 ## Screen Sid [/screen/{sid}]
 
 + Parameters
+
     + sid: `1011` (number) - ID of Screen.
 
 ### Get a Screen [GET]
@@ -917,6 +957,7 @@ return render_template("screen/screen.html", config=config, **locals())
 ## Screen Clone [/screen/{sid}/clone]
 
 + Parameters
+
     + sid: `1011` (number) - ID of Screen.
 
 ### Clone a Screen [POST]
@@ -957,6 +998,7 @@ return redirect("/screen/%s" %new_s.id)
 ## Screen Delete [/screen/{sid}/delete]
 
 + Parameters
+
     + sid: `1012` (number) - ID of Screen.
 
 ### Delete a Screen [GET]
@@ -976,6 +1018,7 @@ return redirect("/screen")
 ## Screen Edit [/screen/{sid}/edit]
 
 + Parameters
+
     + sid: `1011` (number) - ID of Screen.
 
 ### Rename a Screen [POST]
@@ -1005,6 +1048,7 @@ return redirect("/screen/%s" %screen.id)
 ## Screen Graph [/screen/{sid}/graph]
 
 + Parameters
+
     + sid: `1011` (number) - ID of Screen.
 
 ### Add a Graph to a Screen [POST]
@@ -1061,6 +1105,7 @@ return redirect("/screen/%s" % screen.id)
 ## Screen Embed [/screen/embed/{sid}]
 
 + Parameters
+
     + sid: `1011` (number) - ID of Screen.
 
 ### Screen Embed [GET]
@@ -1070,7 +1115,6 @@ return redirect("/screen/%s" % screen.id)
 ```
 
 + Response 200 (text/html)
-
 
 # Group Fe
 
@@ -1414,17 +1458,463 @@ Get users whose names partially matching the keyword.
             ]
         }
 
+## API - Auth Register [/api/v1/auth/register?name={name}&password={password}&repeat_password={repeat_password}&email={emil}]
+
+### Regist User [POST]
+
+Example:
+```
+name = "acct"
+password = "passwd"
+repeat_password = "passwd"
+email = "acct@owl.com"
+```
+
++ Parameters
+  + name (string) - account name
+  + password (string)
+  + repeat_password (string)
+  + email (string)
+
++ Response 200 (application/json)
+
+        {
+          "version": "v1",
+          "method": "POST",
+          "status": "success",
+          "data": {
+            "name": "acct",
+            "expired": 1458815516,
+            "sig": "a9de7114da1811e5adb7001500c6ca5a"
+          }
+        }
+
+## API - Auth Login [/api/v1/auth/login?name={name}&password={password}]
+
+### Login Account [POST]
+Example:
+```
+name = "acct"
+password = "passwd"
+```
+
++ Parameters
+  + name (string) - account name
+  + password (string)
+
++ Response 200 (application/json)
+
+        {
+          "version": "v1",
+          "method": "POST",
+          "status": "success",
+          "data": {
+            "name": "acct",
+            "expired": 1458815516,
+            "sig": "a9de7114da1811e5adb7001500c6ca5a"
+          }
+        }
+
+## API - Auth Login [/api/v1/auth/sessioncheck?cName={cName}&cSig={cSig}]
+
+### Sessioncheck Check. [POST]
+Example:
+```
+cName = "acct"
+cSig = "a9de7114da1811e5adb7001500c6ca5a"
+```
+
++ Parameters
+  + cName (string) - account name
+  + cSig (string) - sig key got during login
+
++ Response 200 (application/json)
+
+        {
+          "version": "v1",
+          "method": "POST",
+          "status": "success",
+          "data": {
+            "expired": 1458815516,
+            "message": "session passed!",
+            "sig": "a9de7114da1811e5adb7001500c6ca5a"
+          }
+        }
+
+## API - Auth Logout [/api/v1/auth/logout?cName={cName}&cSig={cSig}]
+
+### User Logout. [POST]
+Example:
+```
+cName = "acct"
+cSig = "a9de7114da1811e5adb7001500c6ca5a"
+```
+
++ Parameters
+  + cName (string) - account name
+  + cSig (string) - sig key got during login
+
++ Response 200 (application/json)
+
+        {
+          "version": "v1",
+          "method": "POST",
+          "status": "success",
+          "data": {
+            "message": "session is removed"
+          }
+        }
+
+## API - Get User Info  [/api/v1/auth/user?cName={cName}&cSig={cSig}]
+
+### User Logout. [POST]
+Example:
+```
+cName = "acct"
+cSig = "a9de7114da1811e5adb7001500c6ca5a"
+```
+
++ Parameters
+  + cName (string) - account name
+  + cSig (string) - sig key got during login
+
++ Response 200 (application/json)
+
+        {
+          "version": "v1",
+          "method": "POST",
+          "status": "success",
+          "data": {
+            "email": "test@cepave.com",
+            "name": "cepavetest"
+          }
+        }
+
+## API - Update User Info  [/api/v1/auth/user/update?cName={cName}&cSig={cSig}&email={email}&password={password}]
+
+### User Logout. [POST]
+Example:
+```
+cName = "acct"
+cSig = "a9de7114da1811e5adb7001500c6ca5a"
+email = "acct@owl.com"
+password = "passwd"
+```
+
++ Parameters
+  + cName (string) - account name
+  + cSig (string) - sig key got during login
+  + email
+  + password
+
++ Response 200 (application/json)
+
+        {
+          "version": "v1",
+          "method": "POST",
+          "status": "success",
+          "data": {
+            "email": "test@cepave.com",
+            "name": "cepavetest"
+          }
+        }
+
+## API - Endpoints Query  [/api/v1/dashboard/endpoints?cName={cName}&cSig={cSig}&queryStr={queryStr}]
+
+### Endpoints Query. [POST]
+Example:
+```
+cName = "acct"
+cSig = "a9de7114da1811e5adb7001500c6ca5a"
+queryStr = ".+"
+```
+
++ Parameters
+  + cName (string) - account name
+  + cSig (string) - sig key got during login
+  + queryStr - regex query string of endpoints
+
++ Response 200 (application/json)
+
+        {
+          "version": "v1",
+          "method": "POST",
+          "status": "success",
+          "data": {
+            "endpoints": [
+               {
+                 "id": 0,
+                 "endpoint": "docker-task",
+                 "ts": 1456330140
+               },
+               {
+                 "id": 0,
+                 "endpoint": "docker-agent",
+                 "ts": 1456330080
+               },
+               {
+                 "id": 0,
+                 "endpoint": "10.0.0.167",
+                 "ts": 1456330140
+               }
+             ]
+          }
+
+## API - Counter Query  [/api/v1/dashboard/endpointcounters?cName={cName}&cSig={cSig}&endpoints={endpoints}]
+
+### Counter Query. [POST]
+
+Example
+```
+cName = "acct"
+cSig = "a9de7114da1811e5adb7001500c6ca5a"
+endpoints = "[\"docker-agent\",\"testmachine\"]"
+```
+
++ Parameters
+  + endpoints (string) - array of endpoints
+
++ Response 200 (application/json)
+
+        {
+          "version": "v1",
+          "method": "POST",
+          "status": "success",
+          "data": {
+            "counters": [
+               "agent.alive",
+               "cpu.guest",
+               "cpu.idle",
+               "cpu.iowait",
+               "cpu.irq",
+               "cpu.nice",
+               "cpu.softirq",
+               "cpu.steal",
+               "cpu.switches",
+               "cpu.system",
+               "cpu.user"
+             ]
+          }
+
+## API - HostGroup Query  [/api/v1//hostgroup/query?cName={cName}&cSig={cSig}&queryStr={queryStr}]
+
+### HostGroup Query. [POST]
+Example:
+
+```
+cName = "acct"
+cSig = "a9de7114da1811e5adb7001500c6ca5a"
+queryStr = ".+"
+```
+
++ Parameters
+  + queryStr - regex query string of hostgroup
+
++ Response 200 (application/json)
+
+        {
+          "version": "v1",
+          "method": "POST",
+          "status": "success",
+          "data": {
+            "hostgroups": [
+              {
+                "id": 2,
+                "grp_name": "docker",
+                "create_user": "acct",
+                "create_at": "2016-03-07T13:41:52+08:00",
+                "come_from": 1
+              }
+            ]
+          }
+
+## API - Get Endpoint list of HostGroups  [/api/v1//hostgroup/hosts?cName={cName}&cSig={cSig}&queryStr={queryStr}]
+
+### Get Endpoint list of HostGroups. [POST]
+
+Example:
+```
+cName = "acct"
+cSig = "a9de7114da1811e5adb7001500c6ca5a"
+queryStr =  ".+"
+```
+
++ Parameters
+  + queryStr - regex query string of hostgroups
+
++ Response 200 (application/json)
+        {
+          "version": "v1",
+          "method": "POST",
+          "status": "success",
+          "data": {
+            "hosts": [
+              {
+                "id": 1,
+                "hostname": "docker-agent",
+                "ip": "127.0.0.1",
+                "agent_version": "5.1.0",
+                "plugin_version": "plugin not enabled",
+                "maintain_begin": 0,
+                "maintain_end": 0,
+                "update_at": "2016-01-04T16:43:37+08:00"
+              },
+              {
+                "id": 28988,
+                "hostname": "docker-task",
+                "ip": "",
+                "agent_version": "",
+                "plugin_version": "",
+                "maintain_begin": 0,
+                "maintain_end": 0,
+                "update_at": "2016-03-07T13:41:21+08:00"
+              }
+            ]
+          }
+        }
+
+## API - Get Counter list of HostGroups  [/api/v1//hostgroup/hostgroupscounters?cName={cName}&cSig={cSig}&hostgroups={hostgroups}]
+
+### Get Counter list of HostGroups. [POST]
+Example:
+```
+cName = "acct"
+cSig = "a9de7114da1811e5adb7001500c6ca5a"
+hostgroups =  ["docker","testgroup"]
+```
+
++ Parameters
+  + hostgroups - array of hostgroups
+
++ Response 200 (application/json)
+        {
+          "version": "v1",
+          "method": "POST",
+          "status": "success",
+          "data": {
+              "counters": [
+                "falcon.task.alive",
+                "agent.alive",
+                "cpu.guest",
+                "cpu.idle",
+                "cpu.iowait",
+                "cpu.irq",
+                "cpu.nice",
+                "cpu.softirq",
+                "cpu.steal",
+                "cpu.switches",
+                "cpu.system",
+                "cpu.user",
+                "df.bytes.free.percent/fstype=ext4,mount=/config",
+                "df.inodes.free.percent/fstype=ext4,mount=/config",
+                "df.statistics.total",
+                "df.statistics.used"
+              ]
+            }
+          }
+        }
+
+## API - Get Alarm List  [/api/v1/portal/events/get?cName={cName}&cSig={cSig}&startTime={startTime}&endTime={endTime}&priority={priority}&status={status}]
+
+### Get Get Alarm List. [POST]
+Example:
+```
+cName = "acct"
+cSig = "a9de7114da1811e5adb7001500c6ca5a"
+startTime = 1457450919
+endTime = 1458450919
+# -1 means no specific any priority level, get all.
+priority = 0
+#"ALL" means no specific any status, get all.
+status = "PORBLEM"
+```
+
++ Parameters
+  + startTime (timestamp)
+  + endTime (timestamp)
+  + priority (int) - alarm level
+  + status - status of alarm
+
++ Response 200 (application/json)
+        {
+          "version": "v1",
+          "method": "POST",
+          "status": "success",
+          "data": {
+            "events": [
+              {
+                "id": "s_1_b66b973ef551e4e503fad475dfc9e418",
+                "endpoint": "docker-agent",
+                "metric": "cpu.idle",
+                "func": "all(#1)",
+                "cond": "97.91666666666667 != 0",
+                "note": "",
+                "max_step": 30000,
+                "current_step": 28,
+                "priority": 0,
+                "status": "PROBLEM",
+                "timestamp": "2016-03-09T21:42:00+08:00",
+                "update_at": "2016-03-09T23:37:00+08:00",
+                "closed_at": "0001-01-01T00:00:00Z",
+                "user_modified": "",
+                "expression_id": 0,
+                "strategy_id": 1,
+                "template_id": 1
+              },
+              {
+                "id": "s_2_f0b61e6805e88bd507c6a48ebe43aea6",
+                "endpoint": "docker-agent",
+                "metric": "cpu.nice",
+                "func": "all(#1)",
+                "cond": "0 == 0",
+                "note": "",
+                "max_step": 30000,
+                "current_step": 28,
+                "priority": 0,
+                "status": "PROBLEM",
+                "timestamp": "2016-03-09T21:42:00+08:00",
+                "update_at": "2016-03-09T23:37:00+08:00",
+                "closed_at": "0001-01-01T00:00:00Z",
+                "user_modified": "",
+                "expression_id": 0,
+                "strategy_id": 2,
+                "template_id": 1
+              }
+            ]
+          }
+        }
+
+## API - Close Alarm Case  [/api/v1/portal/events/close?cName={cName}&cSig={cSig}&id={id}]
+
+### Get Close Alarm Case. [POST]
+Example:
+```
+cName = "acct"
+cSig = "a9de7114da1811e5adb7001500c6ca5a"
+id = "s_2_f0b61e6805e88bd507c6a48ebe43aea6"
+```
+
++ Parameters
+  + id (string) - id of alarm case
+
++ Response 200 (application/json)
+        {
+          "version": "v1",
+          "method": "PUT",
+          "status": "success"
+        }
+        
 # Group Graph
 
 ## API Recv [/api/recv/{endpoint}/{metric}/{ts}/{step}/{dstype}/{value}]
 
 + Parameters
-    + endpoint (string) - Name of an endpoint.
-    + metric (string) - Name of a metric.
-    + ts (number) - Timestamp.
-    + step (number) - must be greater than or equal to 30 seconds.
-    + dstype (string) - Data source type: GAUGE, COUNTER, or DERIVE.
-    + value (float) - Value of the metric.
+    + endpoint: `host1` (string) - Name of an endpoint.
+    + metric: `cpu.user` (string) - Name of a metric.
+    + ts: `1456286162` (number) - Timestamp.
+    + step: `host` (60) - must be greater than or equal to 30 seconds.
+    + dstype: `GAUGE` (string) - Data source type: GAUGE, COUNTER, or DERIVE.
+    + value: `0.3579` (float) - Value of the metric.
 
 ### Receive Data and Add a Graph Item [GET]
 
@@ -1477,13 +1967,13 @@ Only works if IP is "127.0.0.1", otherwise returns "no privilege".
             "data": "no privilege"
         }
 
-## Count of Graph [/count]
+## Count [/count]
 
 ### Get Count of Graph [GET]
 
 Get count of graph items whose timestamps are earlier than one hour ago.
 
-+ Response 200 (text/plain)
++ Response 200 (application/plain)
 
         330
         339
@@ -1528,20 +2018,17 @@ Get count of graph items whose timestamps are earlier than one hour ago.
 
 ### Get Graph Health [GET]
 
-+ Response 200 (text/plain)
++ Response 200 (application/plain)
 
         ok
 
-## Graph History [/history/{endpoint}/{counter}]
+## History [/history/{endpoint}/{counter}]
 
 + Parameters
-    + endpoint (string) - Name of an endpoint.
-    + counter (string) - Name of a counter.
+    + endpoint: `host1` (string) - Name of an endpoint.
+    + counter: `cpu.user` (string) - Name of a counter.
 
 ### Get Historical Data of a Counter [GET]
-
-Example:
-/history/host1/cpu.user
 
 + Response 200 (application/json)
 
@@ -1590,15 +2077,12 @@ Example:
 ## Index Cache [/index/cache/{endpoint}/{metric}/{step}/{dstype}]
 
 + Parameters
-    + endpoint (string) - Name of an endpoint.
-    + metric (string) - Name of a metric.
-    + step (number) - must be greater than or equal to 30 seconds.
-    + dstype (string) - Data source type: GAUGE, COUNTER, or DERIVE.
+    + endpoint: `host1` (string) - Name of an endpoint.
+    + metric: `cpu.user` (string) - Name of a metric.
+    + step: `host` (60) - must be greater than or equal to 30 seconds.
+    + dstype: `GAUGE` (string) - Data source type: GAUGE, COUNTER, or DERIVE.
 
 ### Get the Content of an Indexed Cache [GET]
-
-Example:
-/index/cache/host1/cpu.user/60/GAUGE
 
 + Response 200 (application/json)
 
@@ -1620,15 +2104,12 @@ Example:
 ## Index Update [/index/update/{endpoint}/{metric}/{step}/{dstype}]
 
 + Parameters
-    + endpoint (string) - Name of an endpoint.
-    + metric (string) - Name of a metric.
-    + step (number) - must be greater than or equal to 30 seconds.
-    + dstype (string) - Data source type: GAUGE, COUNTER, or DERIVE.
+    + endpoint: `host1` (string) - Name of an endpoint.
+    + metric: `cpu.user` (string) - Name of a metric.
+    + step: `host` (60) - must be greater than or equal to 30 seconds.
+    + dstype: `GAUGE` (string) - Data source type: GAUGE, COUNTER, or DERIVE.
 
 ### Update an Indexed Cache [GET]
-
-Example:
-/index/update/host1/cpu.user/60/GAUGE
 
 + Response 200 (application/json)
 
@@ -1659,16 +2140,13 @@ Example:
             "data": 1
         }
 
-## Graph Last [/last/{endpoint}/{counter}]
+## Last [/last/{endpoint}/{counter}]
 
 + Parameters
-    + endpoint (string) - Name of an endpoint.
-    + counter (string) - Name of a counter.
+    + endpoint: `host1` (string) - Name of an endpoint.
+    + counter: `cpu.user` (string) - Name of a counter.
 
 ### Get the Latest Historical Data of a Counter [GET]
-
-Example:
-/last/host1/cpu.user
 
 + Response 200 (application/json)
 
@@ -1694,7 +2172,7 @@ Example:
 
 ### Get Full List of Graph Counters [GET]
 
-Same with "Counter All". This API will be discarded.
+Same with "Counter All". This API will be deprecated.
 
 + Response 200 (application/json)
 
@@ -1826,11 +2304,41 @@ Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[e]=host1&data
             }
         }
 
+## V2 Last [/v2/last]
+
+### Version 2 of Getting the Latest Historical Data of a Counter [POST]
+
+Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[e]=host1&data[m]=cpu.user`
+
++ Request (application/x-www-form-urlencoded)
+
+        data%5Be%5D=host1&data%5Bm%5D=cpu.user
+
++ Response 200 (application/json)
+
+        {
+            "msg": "success",
+            "data": [
+                {
+                    "endpoint": "host1",
+                    "metric": "cpu.user",
+                    "tags": {},
+                    "value": 0.2702702702702703,
+                    "timestamp": 1456888440,
+                    "dstype": "GAUGE",
+                    "step": 60,
+                    "heartbeat": 120,
+                    "min": "U",
+                    "max": "U"
+                }
+            ]
+        }
+
 ## Graph Version [/version]
 
 ### Get Graph Version [GET]
 
-+ Response 200 (text/plain)
++ Response 200 (application/plain)
 
         0.5.5
 
@@ -2006,7 +2514,7 @@ return render_template('index.html', **locals())
 
 ### Store the Content of Alerting Message [POST]
 
-Store the content of alerting message for senging SMS.
+Store the content of alerting message for sending SMS.
 Send content in plain text via POST.
 After "/store" API is called, "falcon_links.alert" table is inserted a new record:
 ```
@@ -2071,7 +2579,7 @@ return render_template('debug/index.html', config=config)
 
         ok
 
-## Metric Query [/api/metric/query?query={query}&limit={limit}]
+## API Metric Query [/api/metric/query?query={query}&limit={limit}]
 
 + Parameters
 
@@ -2148,7 +2656,7 @@ return render_template('debug/index.html', config=config)
             "msg": ""
         }
 
-## UIC Group [/api/uic/group?query={query}&limit={limit}]
+## API UIC Group [/api/uic/group?query={query}&limit={limit}]
 
 + Parameters
 
@@ -2394,7 +2902,7 @@ Do not forget to escape `[` with `%5B` and `]` with `%5D` in `data[group_id]=1&d
 
         data%5Bgroup_id%5D=1&data%5Bhosts%5D=host1
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
         {
             "data": "<div class=\"alert alert-danger\" role=\"alert\">failure:<hr></div><div class=\"alert alert-success\" role=\"alert\">success:<hr>host1<br></div>",
@@ -2893,7 +3401,7 @@ and "tag_endpoint" tables.
 
 ### Get Full List of Task Counters [GET]
 
-Same with "Counter All". This API will be discarded.
+Same with "Counter All". This API will be deprecated.
 
 + Response 200 (application/json)
 
