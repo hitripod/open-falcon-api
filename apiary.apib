@@ -3490,3 +3490,2789 @@ Push the counter to Transfer.
 ## /trace/
 ## /version
 ## /workdir
+
+
+# Group Use Cases
+
+## Get Loading Information from a Specific Agent [/graph/history]
+
+<a name="usecase-2-3" />
+
+### CPU Related Metrics [POST]
+
+
++ Request (application/json)
+
+        {
+            "start": 1462352300,
+            "end": 1462352800,
+            "cf": "AVERAGE",
+            "endpoint_counters": [
+                {
+                    "endpoint": "host123",
+                    "counter": "cpu.idle"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "cpu.guest"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "cpu.iowait"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "cpu.irq"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "cpu.softirq"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "cpu.nice"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "cpu.steal"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "cpu.system"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "cpu.user"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "cpu.switches"
+                }
+            ]
+        }
+
++ Response 200 (application/json)
+
+        [
+          {
+            "endpoint": "host123",
+            "counter": "cpu.idle",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 82.776974
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 84.018531
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "cpu.guest",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "cpu.iowait",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 5.973209
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 4.407495
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "cpu.irq",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "cpu.softirq",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0.254711
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0.245961
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "cpu.nice",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "cpu.steal",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "cpu.system",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 4.903006
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 4.94301
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "cpu.user",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 6.092099
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 6.385002
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "cpu.switches",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 12202.873333
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 10257.606667
+              }
+            ]
+          }
+        ]
+
+### Disk Related Metrics [POST]
+
+
+
++ Request (application/json)
+
+        {
+            "start": 1462352300,
+            "end": 1462352800,
+            "cf": "AVERAGE",
+            "endpoint_counters": [
+                {
+                    "endpoint": "host123",
+                    "counter": "df.bytes.free.percent/fstype=ext4,mount=/"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "df.inodes.free.percent/fstype=ext4,mount=/"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "df.bytes.free.percent/fstype=ext4,mount=/boot"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "df.inodes.free.percent/fstype=ext4,mount=/boot"
+                }
+            ]
+        }
+
+
+
++ Response 200 (application/json)
+
+        [
+          {
+            "endpoint": "host123",
+            "counter": "df.bytes.free.percent/fstype=ext4,mount=/",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 77.239732
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 77.239013
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "df.inodes.free.percent/fstype=ext4,mount=/",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 83.307343
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 83.307119
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "df.bytes.free.percent/fstype=ext4,mount=/boot",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 73.950142
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 73.950142
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "df.inodes.free.percent/fstype=ext4,mount=/boot",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 99.914062
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 99.914062
+              }
+            ]
+          }
+        ]
+
+
+
+
+
+### IO Related Metrics [POST]
+
+
+
++ Request (application/json)
+
+        {
+            "start": 1462352300,
+            "end": 1462352800,
+            "cf": "AVERAGE",
+            "endpoint_counters": [
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.ios_in_progress/device=sda"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.msec_read/device=sda"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.msec_total/device=sda"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.msec_weighted_total/device=sda"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.msec_write/device=sda"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.read_merged/device=sda"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.read_requests/device=sda"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.read_sectors/device=sda"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.write_merged/device=sda"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.write_requests/device=sda"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.write_sectors/device=sda"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.read_bytes/device=sda"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.write_bytes/device=sda"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.avgrq_sz/device=sda"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.avgqu-sz/device=sda"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.await/device=sda"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.svctm/device=sda"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.util/device=sda"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.ios_in_progress/device=sdb"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.msec_read/device=sdb"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.msec_total/device=sdb"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.msec_weighted_total/device=sdb"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.msec_write/device=sdb"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.read_merged/device=sdb"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.read_requests/device=sdb"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.read_sectors/device=sdb"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.write_merged/device=sdb"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.write_requests/device=sdb"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.write_sectors/device=sdb"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.read_bytes/device=sdb"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.write_bytes/device=sdb"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.avgrq_sz/device=sdb"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.avgqu-sz/device=sdb"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.await/device=sdb"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.svctm/device=sdb"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "disk.io.util/device=sdb"
+                }
+            ]
+        }
+
+
++ Response 200 (application/json)
+
+        [
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.ios_in_progress/device=sda",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.msec_read/device=sda",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 1.763333
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0.38
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.msec_total/device=sda",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 2.513333
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 1.783333
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.msec_weighted_total/device=sda",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 16.506667
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 14.9
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.msec_write/device=sda",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 14.746667
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 14.52
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.read_merged/device=sda",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 4.25
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0.91
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.read_requests/device=sda",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 5.8
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 1.23
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.read_sectors/device=sda",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 360.373333
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 35.92
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.write_merged/device=sda",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 10.713333
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 18.98
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.write_requests/device=sda",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 7.963333
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 7.983333
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.write_sectors/device=sda",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 433.226667
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 477.466667
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.read_bytes/device=sda",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 6553.6
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.write_bytes/device=sda",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 77004.8
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 50790.4
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.avgrq_sz/device=sda",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 23.573333
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 28.4
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.avgqu-sz/device=sda",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0.0024
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0.0008
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.await/device=sda",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0.27
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0.216667
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.svctm/device=sda",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0.116667
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0.116667
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.util/device=sda",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0.11988
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0.03996
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.ios_in_progress/device=sdb",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.msec_read/device=sdb",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.msec_total/device=sdb",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.msec_weighted_total/device=sdb",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.msec_write/device=sdb",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.read_merged/device=sdb",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.read_requests/device=sdb",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.read_sectors/device=sdb",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.write_merged/device=sdb",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.write_requests/device=sdb",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.write_sectors/device=sdb",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.read_bytes/device=sdb",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.write_bytes/device=sdb",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.avgrq_sz/device=sdb",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.avgqu-sz/device=sdb",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.await/device=sdb",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.svctm/device=sdb",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "disk.io.util/device=sdb",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          }
+        ]
+
+### Linux's loadavg [POST]
+
+
+
+
++ Request (application/json)
+
+        {
+            "start": 1462352300,
+            "end": 1462352800,
+            "cf": "AVERAGE",
+            "endpoint_counters": [
+                {
+                    "endpoint": "host123",
+                    "counter": "load.1min"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "load.5min"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "load.15min"
+                }
+              ]
+          }
+
+
++ Response 200 (application/json)
+
+          [
+            {
+              "endpoint": "host123",
+              "counter": "load.1min",
+              "dstype": "GAUGE",
+              "step": 60,
+              "Values": [
+                {
+                  "timestamp": 1462352400,
+                  "value": 4.894
+                },
+                {
+                  "timestamp": 1462352700,
+                  "value": 4.414
+                }
+              ]
+            },
+            {
+              "endpoint": "host123",
+              "counter": "load.5min",
+              "dstype": "GAUGE",
+              "step": 60,
+              "Values": [
+                {
+                  "timestamp": 1462352400,
+                  "value": 4.034
+                },
+                {
+                  "timestamp": 1462352700,
+                  "value": 4.74
+                }
+              ]
+            },
+            {
+              "endpoint": "host123",
+              "counter": "load.15min",
+              "dstype": "GAUGE",
+              "step": 60,
+              "Values": [
+                {
+                  "timestamp": 1462352400,
+                  "value": 4.058
+                },
+                {
+                  "timestamp": 1462352700,
+                  "value": 4.384
+                }
+              ]
+            }
+          ]
+
+
+### Memory Related Metrics [POST]
+
+
+
++ Request (application/json)
+
+        {
+            "start": 1462352300,
+            "end": 1462352800,
+            "cf": "AVERAGE",
+            "endpoint_counters": [
+                {
+                    "endpoint": "host123",
+                    "counter": "mem.memfree.percent"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "mem.swapused.percent"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "mem.swapfree.percent"
+                }
+              ]
+          }
+
+
++ Response 200 (application/json)
+
+          [
+            {
+              "endpoint": "host123",
+              "counter": "mem.memfree.percent",
+              "dstype": "GAUGE",
+              "step": 60,
+              "Values": [
+                {
+                  "timestamp": 1462352400,
+                  "value": 93.952555
+                },
+                {
+                  "timestamp": 1462352700,
+                  "value": 89.003508
+                }
+              ]
+            },
+            {
+              "endpoint": "host123",
+              "counter": "mem.swapused.percent",
+              "dstype": "GAUGE",
+              "step": 60,
+              "Values": [
+                {
+                  "timestamp": 1462352400,
+                  "value": 0
+                },
+                {
+                  "timestamp": 1462352700,
+                  "value": 0
+                }
+              ]
+            },
+            {
+              "endpoint": "host123",
+              "counter": "mem.swapfree.percent",
+              "dstype": "GAUGE",
+              "step": 60,
+              "Values": [
+                {
+                  "timestamp": 1462352400,
+                  "value": 100
+                },
+                {
+                  "timestamp": 1462352700,
+                  "value": 100
+                }
+              ]
+            }
+          ]
+
+
+### Monitoring of the Number of Processes [POST]
+
+
+
++ Request (application/json)
+
+        {
+            "start": 1462518950,
+            "end": 1462519100,
+            "cf": "AVERAGE",
+            "endpoint_counters": [
+                {
+                    "endpoint": "11.22.33.44",
+                    "counter": "proc.num/cmdline=syslog"
+                },
+                {
+                    "endpoint": "11.22.33.44",
+                    "counter": "proc.num/name=beam.smp"
+                },
+                {
+                    "endpoint": "11.22.33.44",
+                    "counter": "proc.num/name=crond"
+                },
+                {
+                    "endpoint": "11.22.33.44",
+                    "counter": "proc.num/name=snmpd"
+                }
+            ]
+        }
+
+
++ Response 200 (application/json)
+
+        [
+          {
+            "endpoint": "11.22.33.44",
+            "counter": "proc.num/cmdline=syslog",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462518960,
+                "value": 1
+              },
+              {
+                "timestamp": 1462519020,
+                "value": 1
+              },
+              {
+                "timestamp": 1462519080,
+                "value": 1
+              }
+            ]
+          },
+          {
+            "endpoint": "11.22.33.44",
+            "counter": "proc.num/name=beam.smp",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462518960,
+                "value": 2
+              },
+              {
+                "timestamp": 1462519020,
+                "value": 2
+              },
+              {
+                "timestamp": 1462519080,
+                "value": 2
+              }
+            ]
+          },
+          {
+            "endpoint": "11.22.33.44",
+            "counter": "proc.num/name=crond",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462518960,
+                "value": 2
+              },
+              {
+                "timestamp": 1462519020,
+                "value": 2
+              },
+              {
+                "timestamp": 1462519080,
+                "value": 2
+              }
+            ]
+          },
+          {
+            "endpoint": "11.22.33.44",
+            "counter": "proc.num/name=snmpd",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462518960,
+                "value": 1
+              },
+              {
+                "timestamp": 1462519020,
+                "value": 1
+              },
+              {
+                "timestamp": 1462519080,
+                "value": 1
+              }
+            ]
+          }
+        ]
+
+
+## Get Network Information from a Specific Agent [/graph/history]
+
+<a name="usecase-2-3" />
+
+### Network Related Metrics [POST]
+
+
+
++ Request (application/json)
+
+        {
+            "start": 1462352600,
+            "end": 1462352800,
+            "cf": "AVERAGE",
+            "endpoint_counters": [
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.in.bits/iface=eth0"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.in.compressed/iface=eth0"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.in.dropped/iface=eth0"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.in.errors/iface=eth0"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.in.fifo.errs/iface=eth0"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.in.frame.errs/iface=eth0"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.in.multicast/iface=eth0"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.in.packets/iface=eth0"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.out.bits/iface=eth0"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.out.carrier.errs/iface=eth0"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.out.collisions/iface=eth0"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.out.compressed/iface=eth0"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.out.dropped/iface=eth0"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.out.errors/iface=eth0"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.out.fifo.errs/iface=eth0"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.out.packets/iface=eth0"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.total.bits/iface=eth0"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.total.dropped/iface=eth0"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.total.errors/iface=eth0"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.total.packets/iface=eth0"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.in.bits/iface=eth1"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.in.compressed/iface=eth1"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.in.dropped/iface=eth1"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.in.errors/iface=eth1"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.in.fifo.errs/iface=eth1"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.in.frame.errs/iface=eth1"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.in.multicast/iface=eth1"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.in.packets/iface=eth1"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.out.bits/iface=eth1"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.out.carrier.errs/iface=eth1"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.out.collisions/iface=eth1"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.out.compressed/iface=eth1"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.out.dropped/iface=eth1"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.out.errors/iface=eth1"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.out.fifo.errs/iface=eth1"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.out.packets/iface=eth1"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.total.bits/iface=eth1"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.total.dropped/iface=eth1"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.total.errors/iface=eth1"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "net.if.total.packets/iface=eth1"
+                }
+            ]
+        }
+
++ Response 200 (application/json)
+
+        [
+          {
+            "endpoint": "host123",
+            "counter": "net.if.in.bits/iface=eth0",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 8815881.36
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.in.compressed/iface=eth0",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.in.dropped/iface=eth0",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.in.errors/iface=eth0",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.in.fifo.errs/iface=eth0",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.in.frame.errs/iface=eth0",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.in.multicast/iface=eth0",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 4.156667
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.in.packets/iface=eth0",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 14321.446667
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.out.bits/iface=eth0",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 137828625.36
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.out.carrier.errs/iface=eth0",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.out.collisions/iface=eth0",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.out.compressed/iface=eth0",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.out.dropped/iface=eth0",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.out.errors/iface=eth0",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.out.fifo.errs/iface=eth0",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.out.packets/iface=eth0",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 11907.493333
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.total.bits/iface=eth0",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 146644506.72
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.total.dropped/iface=eth0",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.total.errors/iface=eth0",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.total.packets/iface=eth0",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 26228.94
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.in.bits/iface=eth1",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 5638.4
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.in.compressed/iface=eth1",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.in.dropped/iface=eth1",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.in.errors/iface=eth1",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.in.fifo.errs/iface=eth1",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.in.frame.errs/iface=eth1",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.in.multicast/iface=eth1",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.in.packets/iface=eth1",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 11.016667
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.out.bits/iface=eth1",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 141985037.92
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.out.carrier.errs/iface=eth1",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.out.collisions/iface=eth1",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.out.compressed/iface=eth1",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.out.dropped/iface=eth1",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.out.errors/iface=eth1",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.out.fifo.errs/iface=eth1",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.out.packets/iface=eth1",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 12472.763333
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.total.bits/iface=eth1",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 141990676.32
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.total.dropped/iface=eth1",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.total.errors/iface=eth1",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "net.if.total.packets/iface=eth1",
+            "dstype": "DERIVE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352700,
+                "value": 12483.78
+              }
+            ]
+          }
+        ]
+
+### Output of ss [POST]
+
+
+
++ Request (application/json)
+
+        {
+            "start": 1462352300,
+            "end": 1462352800,
+            "cf": "AVERAGE",
+            "endpoint_counters": [
+                {
+                    "endpoint": "host123",
+                    "counter": "ss.orphaned"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "ss.closed"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "ss.timewait"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "ss.slabinfo.timewait"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "ss.synrecv"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "ss.estab"
+                }
+            ]
+        }
+
+
++ Response 200 (application/json)
+
+        [
+          {
+            "endpoint": "host123",
+            "counter": "ss.orphaned",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 175.4
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 173.8
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "ss.closed",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 506.6
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 420.8
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "ss.timewait",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 500.8
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 415.4
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "ss.slabinfo.timewait",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "ss.synrecv",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 0
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 0
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "ss.estab",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 158
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 155.2
+              }
+            ]
+          }
+        ]
+
+
+## Get Machine's Information from a Specific Agent [/graph/history]
+
+<a name="usecase-2-3" />
+
+### Kernel's Setting [POST]
+
+
+
++ Request (application/json)
+
+        {
+            "start": 1462352300,
+            "end": 1462352800,
+            "cf": "AVERAGE",
+            "endpoint_counters": [
+                {
+                    "endpoint": "host123",
+                    "counter": "kernel.maxfiles"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "kernel.files.allocated"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "kernel.files.left"
+                },
+                {
+                    "endpoint": "host123",
+                    "counter": "kernel.maxproc"
+                }
+            ]
+        }
+
+
++ Response 200 (application/json)
+
+        [
+          {
+            "endpoint": "host123",
+            "counter": "kernel.maxfiles",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 6551829
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 6551829
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "kernel.files.allocated",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 18096
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 18124.8
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "kernel.files.left",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 6533733
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 6533704.2
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "kernel.maxproc",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462352400,
+                "value": 32768
+              },
+              {
+                "timestamp": 1462352700,
+                "value": 32768
+              }
+            ]
+          }
+        ]
+
+
+
+
+## Network Quality Measurement [/graph/history]
+
+<a name="usecase-2-3" />
+
+### Number of Packets Sent [POST]
+
+
+
++ Request (application/json)
+
+        {
+            "start": 1462520900,
+            "end": 1462521200,
+            "cf": "AVERAGE",
+            "endpoint_counters": [
+                {
+                    "endpoint": "host456",
+                    "counter": "packets-sent/nqm-agent-city=<UNDEFINED>,nqm-agent-isp=网通,nqm-agent-province=湖南,target-city=<UNDEFINED>,target-ip=11.22.33.44,target-isp=电信,target-name-tag=电信_湖北,target-province=湖北"
+                }
+            ]
+        }
+
+
++ Response 200 (application/json)
+
+        [
+          {
+            "endpoint": "host456",
+            "counter": "packets-sent/nqm-agent-city=<UNDEFINED>,nqm-agent-isp=网通,nqm-agent-province=湖南,target-city=<UNDEFINED>,target-ip=11.22.33.44,target-isp=电信,target-name-tag=电信_湖北,target-province=湖北",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462520940,
+                "value": 4
+              },
+              {
+                "timestamp": 1462521000,
+                "value": 4
+              },
+              {
+                "timestamp": 1462521060,
+                "value": 4
+              },
+              {
+                "timestamp": 1462521120,
+                "value": 4
+              },
+              {
+                "timestamp": 1462521180,
+                "value": 4
+              }
+            ]
+          }
+        ]
+
+### Number of Packets Received [POST]
+
++ Request (application/json)
+
+        {
+            "start": 1462520900,
+            "end": 1462521200,
+            "cf": "AVERAGE",
+            "endpoint_counters": [
+                {
+                    "endpoint": "host456",
+                    "counter": "packets-received/nqm-agent-city=<UNDEFINED>,nqm-agent-isp=网通,nqm-agent-province=湖南,target-city=<UNDEFINED>,target-ip=11.22.33.44,target-isp=电信,target-name-tag=电信_湖北,target-province=湖北"
+                }
+            ]
+        }
+
+
++ Response 200 (application/json)
+
+        [
+          {
+            "endpoint": "host456",
+            "counter": "packets-received/nqm-agent-city=<UNDEFINED>,nqm-agent-isp=网通,nqm-agent-province=湖南,target-city=<UNDEFINED>,target-ip=11.22.33.44,target-isp=电信,target-name-tag=电信_湖北,target-province=湖北",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462520940,
+                "value": 4
+              },
+              {
+                "timestamp": 1462521000,
+                "value": 4
+              },
+              {
+                "timestamp": 1462521060,
+                "value": 4
+              },
+              {
+                "timestamp": 1462521120,
+                "value": 4
+              },
+              {
+                "timestamp": 1462521180,
+                "value": 4
+              }
+            ]
+          }
+        ]
+
+
+
+
+### Packet Loss Rate [POST]
+
+
+
+
++ Request (application/json)
+
+        {
+            "start": 1462522490,
+            "end": 1462522810,
+            "cf": "AVERAGE",
+            "endpoint_counters": [
+                {
+                     "endpoint": "host456",
+                     "counter": "packets-sent/nqm-agent-city=<UNDEFINED>,nqm-agent-isp=网通,nqm-agent-province=湖南,target-city=<UNDEFINED>,target-ip=11.22.33.44,target-isp=电信,target-name-tag=电信_湖北,target-province=湖北"
+                },
+                {
+                     "endpoint": "host456",
+                     "counter": "packets-sent/nqm-agent-city=<UNDEFINED>,nqm-agent-isp=网通,nqm-agent-province=湖南,target-city=<UNDEFINED>,target-ip=22.33.44.55,target-isp=电信,target-name-tag=电信_江苏,target-province=江苏"
+                },
+                {
+                     "endpoint": "host456",
+                     "counter": "packet-loss-rate"
+                }
+            ]
+        }
+
+
++ Response 200 (application/json)
+
+        [
+          {
+            "endpoint": "host456",
+            "counter": "packets-sent/nqm-agent-city=<UNDEFINED>,nqm-agent-isp=网通,nqm-agent-province=湖南,target-city=<UNDEFINED>,target-ip=11.22.33.44,target-isp=电信,target-name-tag=电信_湖北,target-province=湖北",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462522500,
+                "value": 4
+              },
+              {
+                "timestamp": 1462522560,
+                "value": 4
+              },
+              {
+                "timestamp": 1462522620,
+                "value": 4
+              },
+              {
+                "timestamp": 1462522680,
+                "value": 4
+              },
+              {
+                "timestamp": 1462522740,
+                "value": 4
+              },
+              {
+                "timestamp": 1462522800,
+                "value": 4
+              }
+            ]
+          },
+          {
+            "endpoint": "host456",
+            "counter": "packets-received/nqm-agent-city=<UNDEFINED>,nqm-agent-isp=网通,nqm-agent-province=湖南,target-city=<UNDEFINED>,target-ip=11.22.33.44,target-isp=电信,target-name-tag=电信_湖北,target-province=湖北",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462522500,
+                "value": 4
+              },
+              {
+                "timestamp": 1462522560,
+                "value": 4
+              },
+              {
+                "timestamp": 1462522620,
+                "value": 4
+              },
+              {
+                "timestamp": 1462522680,
+                "value": 4
+              },
+              {
+                "timestamp": 1462522740,
+                "value": 4
+              },
+              {
+                "timestamp": 1462522800,
+                "value": 4
+              }
+            ]
+          },
+          {
+            "endpoint": "host456",
+            "counter": "packets-sent/nqm-agent-city=<UNDEFINED>,nqm-agent-isp=网通,nqm-agent-province=湖南,target-city=<UNDEFINED>,target-ip=22.33.44.55,target-isp=电信,target-name-tag=电信_江苏,target-province=江苏",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462522500,
+                "value": 4
+              },
+              {
+                "timestamp": 1462522560,
+                "value": 4
+              },
+              {
+                "timestamp": 1462522620,
+                "value": 4
+              },
+              {
+                "timestamp": 1462522680,
+                "value": 4
+              },
+              {
+                "timestamp": 1462522740,
+                "value": 4
+              },
+              {
+                "timestamp": 1462522800,
+                "value": 4
+              }
+            ]
+          },
+          {
+            "endpoint": "host456",
+            "counter": "packets-received/nqm-agent-city=<UNDEFINED>,nqm-agent-isp=网通,nqm-agent-province=湖南,target-city=<UNDEFINED>,target-ip=22.33.44.55,target-isp=电信,target-name-tag=电信_江苏,target-province=江苏",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462522500,
+                "value": 4
+              },
+              {
+                "timestamp": 1462522560,
+                "value": 4
+              },
+              {
+                "timestamp": 1462522620,
+                "value": 4
+              },
+              {
+                "timestamp": 1462522680,
+                "value": 4
+              },
+              {
+                "timestamp": 1462522740,
+                "value": 4
+              },
+              {
+                "timestamp": 1462522800,
+                "value": 4
+              }
+            ]
+          },
+          {
+            "endpoint": "all-endpoints",
+            "counter": "packet-loss-rate",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462522500,
+                "value": 0
+              },
+              {
+                "timestamp": 1462522560,
+                "value": 0
+              },
+              {
+                "timestamp": 1462522620,
+                "value": 0
+              },
+              {
+                "timestamp": 1462522680,
+                "value": 0
+              },
+              {
+                "timestamp": 1462522740,
+                "value": 0
+              },
+              {
+                "timestamp": 1462522800,
+                "value": 0
+              }
+            ]
+          }
+        ]
+
+
+
+### Transmission Time[POST]
+
+
+
++ Request (application/json)
+
+        {
+            "start": 1462521350,
+            "end": 1462521550,
+            "cf": "AVERAGE",
+            "endpoint_counters": [
+                {
+                     "endpoint": "host789",
+                     "counter": "transmission-time/nqm-agent-city=<UNDEFINED>,nqm-agent-isp=网通,nqm-agent-province=内蒙古,target-city=<UNDEFINED>,target-ip=11.22.33.44,target-isp=电信,target-name-tag=电信_江苏,target-province=江苏"
+                }
+            ]
+        }
+
+
++ Response 200 (application/json)
+
+        [
+          {
+            "endpoint": "host789",
+            "counter": "transmission-time/nqm-agent-city=<UNDEFINED>,nqm-agent-isp=网通,nqm-agent-province=内蒙古,target-city=<UNDEFINED>,target-ip=11.22.33.44,target-isp=电信,target-name-tag=电信_江苏,target-province=江苏",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462521360,
+                "value": 48.4
+              },
+              {
+                "timestamp": 1462521420,
+                "value": 48.4
+              },
+              {
+                "timestamp": 1462521480,
+                "value": 48.4
+              },
+              {
+                "timestamp": 1462521540,
+                "value": 48.4
+              }
+            ]
+          }
+        ]
+
+### Average Transmission Time [POST]
+
+
+
+
++ Request (application/json)
+
+        {
+            "start": 1462521500,
+            "end": 1462521800,
+            "cf": "AVERAGE",
+            "endpoint_counters": [
+                {
+                     "endpoint": "host789",
+                     "counter": "transmission-time/nqm-agent-city=<UNDEFINED>,nqm-agent-isp=网通,nqm-agent-province=内蒙古,target-city=<UNDEFINED>,target-ip=11.22.33.44,target-isp=电信,target-name-tag=电信_江苏,target-province=江苏"
+                },
+                {
+                     "endpoint": "host789",
+                     "counter": "transmission-time/nqm-agent-city=<UNDEFINED>,nqm-agent-isp=网通,nqm-agent-province=内蒙古,target-city=<UNDEFINED>,target-ip=22.33.44.55,target-isp=电信,target-name-tag=电信_江苏,target-province=江苏"
+                },
+                {
+                     "endpoint": "host789",
+                     "counter": "average"
+                }
+            ]
+        }
+
+
++ Response 200 (application/json)
+
+        [
+          {
+            "endpoint": "host789",
+            "counter": "transmission-time/nqm-agent-city=<UNDEFINED>,nqm-agent-isp=网通,nqm-agent-province=内蒙古,target-city=<UNDEFINED>,target-ip=11.22.33.44,target-isp=电信,target-name-tag=电信_江苏,target-province=江苏",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462521540,
+                "value": 42.7
+              },
+              {
+                "timestamp": 1462521600,
+                "value": 43
+              },
+              {
+                "timestamp": 1462521660,
+                "value": 43
+              },
+              {
+                "timestamp": 1462521720,
+                "value": 44.1
+              },
+              {
+                "timestamp": 1462521780,
+                "value": 42.9
+              }
+            ]
+          },
+          {
+            "endpoint": "host789",
+            "counter": "packets-sent/nqm-agent-city=<UNDEFINED>,nqm-agent-isp=网通,nqm-agent-province=内蒙古,target-city=<UNDEFINED>,target-ip=11.22.33.44,target-isp=电信,target-name-tag=电信_江苏,target-province=江苏",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462521540,
+                "value": 4
+              },
+              {
+                "timestamp": 1462521600,
+                "value": 4
+              },
+              {
+                "timestamp": 1462521660,
+                "value": 4
+              },
+              {
+                "timestamp": 1462521720,
+                "value": 4
+              },
+              {
+                "timestamp": 1462521780,
+                "value": 4
+              }
+            ]
+          },
+          {
+            "endpoint": "host789",
+            "counter": "transmission-time/nqm-agent-city=<UNDEFINED>,nqm-agent-isp=网通,nqm-agent-province=内蒙古,target-city=<UNDEFINED>,target-ip=22.33.44.55,target-isp=电信,target-name-tag=电信_江苏,target-province=江苏",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462521540,
+                "value": 48.9
+              },
+              {
+                "timestamp": 1462521600,
+                "value": 49.1
+              },
+              {
+                "timestamp": 1462521660,
+                "value": 49.1
+              },
+              {
+                "timestamp": 1462521720,
+                "value": 48.4
+              },
+              {
+                "timestamp": 1462521780,
+                "value": 49.5
+              }
+            ]
+          },
+          {
+            "endpoint": "host789",
+            "counter": "packets-sent/nqm-agent-city=<UNDEFINED>,nqm-agent-isp=网通,nqm-agent-province=内蒙古,target-city=<UNDEFINED>,target-ip=22.33.44.55,target-isp=电信,target-name-tag=电信_江苏,target-province=江苏",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462521540,
+                "value": 4
+              },
+              {
+                "timestamp": 1462521600,
+                "value": 4
+              },
+              {
+                "timestamp": 1462521660,
+                "value": 4
+              },
+              {
+                "timestamp": 1462521720,
+                "value": 4
+              },
+              {
+                "timestamp": 1462521780,
+                "value": 4
+              }
+            ]
+          },
+          {
+            "endpoint": "all-endpoints",
+            "counter": "average",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462521540,
+                "value": 45.8
+              },
+              {
+                "timestamp": 1462521600,
+                "value": 46.05
+              },
+              {
+                "timestamp": 1462521660,
+                "value": 46.05
+              },
+              {
+                "timestamp": 1462521720,
+                "value": 46.25
+              },
+              {
+                "timestamp": 1462521780,
+                "value": 46.2
+              }
+            ]
+          }
+        ]
