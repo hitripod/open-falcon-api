@@ -3491,15 +3491,13 @@ Push the counter to Transfer.
 ## /version
 ## /workdir
 
-
 # Group Use Cases
 
-## Get Loading Information from a Specific Agent [/graph/history]
+## Get Information from a Specific Agent by /graph/history [/grpah/history]
 
 <a name="usecase-2-3" />
 
-### CPU Related Metrics [POST]
-
+### Loading - CPU Related Metrics [POST]
 
 + Request (application/json)
 
@@ -3716,9 +3714,7 @@ Push the counter to Transfer.
           }
         ]
 
-### Disk Related Metrics [POST]
-
-
+### Loading - Disk Related Metrics [POST]
 
 + Request (application/json)
 
@@ -3745,8 +3741,6 @@ Push the counter to Transfer.
                 }
             ]
         }
-
-
 
 + Response 200 (application/json)
 
@@ -3817,13 +3811,7 @@ Push the counter to Transfer.
           }
         ]
 
-
-
-
-
-### IO Related Metrics [POST]
-
-
+### Loading - IO Related Metrics [POST]
 
 + Request (application/json)
 
@@ -3978,7 +3966,6 @@ Push the counter to Transfer.
                 }
             ]
         }
-
 
 + Response 200 (application/json)
 
@@ -4561,10 +4548,7 @@ Push the counter to Transfer.
           }
         ]
 
-### Linux's loadavg [POST]
-
-
-
+### Loading - Linux's loadavg [POST]
 
 + Request (application/json)
 
@@ -4587,7 +4571,6 @@ Push the counter to Transfer.
                 }
               ]
           }
-
 
 + Response 200 (application/json)
 
@@ -4642,10 +4625,7 @@ Push the counter to Transfer.
             }
           ]
 
-
-### Memory Related Metrics [POST]
-
-
+### Loading - Memory Related Metrics [POST]
 
 + Request (application/json)
 
@@ -4668,7 +4648,6 @@ Push the counter to Transfer.
                 }
               ]
           }
-
 
 + Response 200 (application/json)
 
@@ -4723,10 +4702,7 @@ Push the counter to Transfer.
             }
           ]
 
-
-### Monitoring of the Number of Processes [POST]
-
-
+### Loading - Monitoring of the Number of Processes [POST]
 
 + Request (application/json)
 
@@ -4753,7 +4729,6 @@ Push the counter to Transfer.
                 }
             ]
         }
-
 
 + Response 200 (application/json)
 
@@ -4840,14 +4815,7 @@ Push the counter to Transfer.
           }
         ]
 
-
-## Get Network Information from a Specific Agent [/graph/history]
-
-<a name="usecase-2-3" />
-
-### Network Related Metrics [POST]
-
-
+### Network - Interface Related Metrics [POST]
 
 + Request (application/json)
 
@@ -5504,9 +5472,7 @@ Push the counter to Transfer.
           }
         ]
 
-### Output of ss [POST]
-
-
+### Network - Output of ss [POST]
 
 + Request (application/json)
 
@@ -5541,7 +5507,6 @@ Push the counter to Transfer.
                 }
             ]
         }
-
 
 + Response 200 (application/json)
 
@@ -5644,14 +5609,7 @@ Push the counter to Transfer.
           }
         ]
 
-
-## Get Machine's Information from a Specific Agent [/graph/history]
-
-<a name="usecase-2-3" />
-
-### Kernel's Setting [POST]
-
-
+### Status - Kernel's Setting [POST]
 
 + Request (application/json)
 
@@ -5678,7 +5636,6 @@ Push the counter to Transfer.
                 }
             ]
         }
-
 
 + Response 200 (application/json)
 
@@ -5749,16 +5706,72 @@ Push the counter to Transfer.
           }
         ]
 
+### Status - Agent's Status [POST]
 
++ Request (application/json)
 
+        {
+            "start": 1462763000,
+            "end": 1462763300,
+            "cf": "AVERAGE",
+            "endpoint_counters": [
+                        {
+                             "endpoint": "host123",
+                             "counter": "agent.alive"
+                        },
+                        {
+                             "endpoint": "host123",
+                             "counter": "zabbix-agent.alive"
+                        }
+            ]
+        }
 
-## Network Quality Measurement [/graph/history]
++ Response 200 (application/json)
 
-<a name="usecase-2-3" />
+        [
+          {
+            "endpoint": "host123",
+            "counter": "agent.alive",
+            "dstype": "GAUGE",
+            "step": 60,
+            "Values": [
+              {
+                "timestamp": 1462763040,
+                "value": 1
+              },
+              {
+                "timestamp": 1462763100,
+                "value": 1
+              },
+              {
+                "timestamp": 1462763160,
+                "value": 1
+              },
+              {
+                "timestamp": 1462763220,
+                "value": 1
+              },
+              {
+                "timestamp": 1462763280,
+                "value": 1
+              }
+            ]
+          },
+          {
+            "endpoint": "host123",
+            "counter": "zabbix-agent.alive",
+            "dstype": "GAUGE",
+            "step": 300,
+            "Values": [
+              {
+                "timestamp": 1462763100,
+                "value": 0
+              }
+            ]
+          }
+        ]
 
-### Number of Packets Sent [POST]
-
-
+### Network Quality Measurement - Number of Packets Sent [POST]
 
 + Request (application/json)
 
@@ -5773,7 +5786,6 @@ Push the counter to Transfer.
                 }
             ]
         }
-
 
 + Response 200 (application/json)
 
@@ -5808,7 +5820,7 @@ Push the counter to Transfer.
           }
         ]
 
-### Number of Packets Received [POST]
+### Network Quality Measurement - Number of Packets Received [POST]
 
 + Request (application/json)
 
@@ -5823,7 +5835,6 @@ Push the counter to Transfer.
                 }
             ]
         }
-
 
 + Response 200 (application/json)
 
@@ -5858,13 +5869,7 @@ Push the counter to Transfer.
           }
         ]
 
-
-
-
-### Packet Loss Rate [POST]
-
-
-
+### Network Quality Measurement - Packet Loss Rate [POST]
 
 + Request (application/json)
 
@@ -5887,7 +5892,6 @@ Push the counter to Transfer.
                 }
             ]
         }
-
 
 + Response 200 (application/json)
 
@@ -6054,11 +6058,7 @@ Push the counter to Transfer.
           }
         ]
 
-
-
-### Transmission Time[POST]
-
-
+### Network Quality Measurement - Transmission Time[POST]
 
 + Request (application/json)
 
@@ -6073,7 +6073,6 @@ Push the counter to Transfer.
                 }
             ]
         }
-
 
 + Response 200 (application/json)
 
@@ -6104,10 +6103,7 @@ Push the counter to Transfer.
           }
         ]
 
-### Average Transmission Time [POST]
-
-
-
+### Network Quality Measurement - Average Transmission Time [POST]
 
 + Request (application/json)
 
@@ -6130,7 +6126,6 @@ Push the counter to Transfer.
                 }
             ]
         }
-
 
 + Response 200 (application/json)
 
